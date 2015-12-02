@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class EnemySpawn : MonoBehaviour
 {
     Transform myTransform;
 
-    public GameObject Enemy;
+    public GameObject EnemyBoss, EnemyCreep;
 
     public float SpawnDelay;
     float timer;
@@ -13,15 +14,29 @@ public class EnemySpawn : MonoBehaviour
     void Start()
     {
         myTransform = GetComponent<Transform>();
+        GameController.EnemySpawnPoints.Add(gameObject);
+        InvokeRepeating("SpawnCreeps", 0, 5);
     }
 
     void Update()
     {
-        timer += Time.deltaTime;
-        if (timer >= SpawnDelay)
+        if (GameController.TotalEnemyCount >= 8)
         {
-            Instantiate(Enemy, myTransform.position, Quaternion.identity);
-            timer = 0;
+            CancelInvoke("SpawnCreeps");
         }
+    }
+
+    public void SpawnCreeps()
+    {
+        GameObject creep = (GameObject)Instantiate(EnemyCreep, myTransform.position, Quaternion.identity);
+        creep.name = "Creep";
+        GameController.CurEnemyCount++;
+        GameController.TotalEnemyCount++;
+    }
+
+    public void SpawnBoss()
+    {
+        GameObject boss = (GameObject)Instantiate(EnemyBoss, myTransform.position, Quaternion.identity);
+        boss.name = "Boss";
     }
 }

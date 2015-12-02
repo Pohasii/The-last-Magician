@@ -7,7 +7,7 @@ public class SpellSDataBase : MonoBehaviour
 {
     public List<GameObject> SpellObj = new List<GameObject>();
 
-    public List<Spell> Spells = new List<Spell>();
+    public static List<Spell> Spells = new List<Spell>();
 
     public static Element FireElement, FrostElement, ArcaneElement;
 
@@ -18,6 +18,8 @@ public class SpellSDataBase : MonoBehaviour
 
     public List<Material> SpellMaterial = new List<Material>();
     public List<Material> ElementMaterial = new List<Material>();
+    public Material LineMaterial;
+    public GameObject pointObj;
 
     ////Массивы элементов для спела
     List<Element> FireBallElements = new List<Element>();
@@ -50,7 +52,7 @@ public class SpellSDataBase : MonoBehaviour
 
     void Awake()
     {
-        ElementsInDB.Add(new Element("Fire", "Кароче это огонь", 10, new Vector3(50, 0, -20), ElementMaterial[0],Color.red));
+        ElementsInDB.Add(new Element("Fire", "Кароче это огонь", 10, new Vector3(50, 0, -20), ElementMaterial[0], Color.red));
         ElementsInDB.Add(new Element("Frost", "Кароче это лед", 10, new Vector3(100, 0, -20), ElementMaterial[1], Color.blue));
         ElementsInDB.Add(new Element("Arcane", "Кароче это тайная магия", 10, new Vector3(150, 0, -20), ElementMaterial[2], Color.cyan));
 
@@ -71,8 +73,9 @@ public class SpellSDataBase : MonoBehaviour
         BlinkElements.Add(ArcaneElement);
         BlinkElements.Add(ArcaneElement);
         /////////////////////////////////////////
-        Spells.Add(new DamageSpell(SpellObj[0], SpellMaterial[0], Color.red, "Fire Ball", "Over 9000 damge", FireBallElements, 2f, 20f, 2f, 10f, DamageSpell.SpellDamageTypes.Fire, Spell.SpellsEffects.DoT));
-        Spells.Add(new DamageSpell(SpellObj[1], SpellMaterial[1], Color.blue, "Frost Bolt", "Over 8999 damge", FrostBoltElements, 1f, 7f, 1.5f, 10f, DamageSpell.SpellDamageTypes.Frost, Spell.SpellsEffects.Slowdown));
-        Spells.Add(new MovementSpell(Color.cyan, SpellMaterial[2], "Blink", "Blink))0", BlinkElements, 3f, 0f, 10f, 5f));
+
+        Spells.Add(new DamageSpell("FireBall", "Damage", SpellMaterial[0], LineMaterial, pointObj, SpellObj[0], FireBallElements, 25f, 2f, DamageSpell.SpellDamageTypes.Fire, Spell.SpellsEffects.DoT));
+        Spells.Add(new DamageSpell("FrostBolt", "Slow", SpellMaterial[1], LineMaterial, pointObj, SpellObj[1], FrostBoltElements, 1f, 1f, DamageSpell.SpellDamageTypes.Frost, Spell.SpellsEffects.Slowdown));
+        Spells.Add(new MovementSpell("Blink", "Blink111", SpellMaterial[2], BlinkElements, 0f, 15f));
     }
 }

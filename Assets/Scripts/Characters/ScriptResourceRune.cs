@@ -8,6 +8,8 @@ public class ScriptResourceRune : MonoBehaviour
     public float maxCoolDown;
     public float CurCoolDown;
     Transform myTransform;
+    public bool continueCD;
+    bool hz;
 
     void Start()
     {
@@ -19,13 +21,22 @@ public class ScriptResourceRune : MonoBehaviour
     void Update()
     {
         CoolDown();
+        CD();
+    }
+
+    public void CD()
+    {
+        if(continueCD)
+        CurCoolDown -= Time.deltaTime;
     }
 
     public void CoolDown()
     {
         if (CurCoolDown > 0)
         {
+            if(hz)
             CurCoolDown -= Time.deltaTime;
+
             myTransform.GetChild(0).gameObject.GetComponent<Image>().enabled = true;
             myTransform.GetChild(0).GetComponent<Image>().fillAmount = CurCoolDown / maxCoolDown;
         }
@@ -33,11 +44,18 @@ public class ScriptResourceRune : MonoBehaviour
         {
             myTransform.GetChild(0).GetComponent<Image>().fillAmount = 1;
             myTransform.GetChild(0).gameObject.GetComponent<Image>().enabled = false;
+            continueCD = false;
         }
     }
 
-    public void StartCD()
+    public void StartCD(bool p_hz)
     {
+        hz = p_hz;
         CurCoolDown = maxCoolDown;
+    }
+
+    public void ContinueCD()
+    {
+        continueCD = true;
     }
 }

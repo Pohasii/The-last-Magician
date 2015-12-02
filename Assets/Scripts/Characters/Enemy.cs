@@ -34,9 +34,8 @@ public class Enemy
 
     PlayerScript playerScripts;
 
-    Canvas canvas;
     Slider EnemyHPSlider;
-
+    
     public static GameObject ScoreRune;
 
     public Enemy(NavMeshAgent nav, Canvas p_Canvas,float Damage, float AttacDelay,float HP, float MP, float HPRegen, float MPRegen)
@@ -50,7 +49,6 @@ public class Enemy
         EnemyHPRegen = HPRegen;
         EnemyMPRegen = MPRegen;
 
-        canvas = p_Canvas;
         EnemyHPSlider = p_Canvas.transform.GetChild(0).GetComponent<Slider>();
         EnemyHPSlider.maxValue = EnemyMaxHP;
         EnemyHPSlider.value = EnemyCurHp;
@@ -76,9 +74,9 @@ public class Enemy
         }
     }
 
-    public void TakeDamage(float Damage)
+    public void TakeDamage(DamageSpell SpellInfo)
     {
-        EnemyCurHp -= Damage;
+        EnemyCurHp -= SpellInfo.SpellDamage1;
     }
 
     public void AttacTrigger()

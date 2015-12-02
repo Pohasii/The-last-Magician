@@ -10,7 +10,6 @@ public class Player
     Rigidbody myRigidbody;
 
     Vector3 PlayerMovement;
-    int florMask;
 
     float PlayerMaxHP;
     float PlayerCurHealth;
@@ -20,10 +19,8 @@ public class Player
         set { PlayerCurHealth = value; }
     }
 
-    float PlayerMP;
     float PlayerMoveSpeed;
     float PlayerHPRegen;
-    float PlayerMPRegen;
 
     Slider healthSlider;
     Image damageImage;
@@ -46,15 +43,13 @@ public class Player
 
     public List<Spell> Seplls;
 
-    public Player(Transform mytransform, Rigidbody myrigidbody, List<Spell> p_Spells, float HP, float MP, float MoveSpeed, float HPRegen, float MPRegen, Slider hpSlider, Image DmgImage)
+    public Player(Transform mytransform, Rigidbody myrigidbody, List<Spell> p_Spells, float HP, float MoveSpeed, float HPRegen, Slider hpSlider, Image DmgImage)
     {
         Seplls = p_Spells;
         PlayerMaxHP = HP;
         PlayerCurHealth = HP;
-        PlayerMP = MP;
         PlayerMoveSpeed = MoveSpeed;
         PlayerHPRegen = HPRegen;
-        PlayerMPRegen = MPRegen;
 
         myTransform = mytransform;
         myRigidbody = myrigidbody;
@@ -66,8 +61,6 @@ public class Player
         damageImage = DmgImage;
 
         cameraTransform = Camera.main.transform;
-
-        florMask = LayerMask.GetMask("Floor");
     }
 
     public void Move(float h, float v)

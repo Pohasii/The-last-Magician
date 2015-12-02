@@ -32,7 +32,31 @@ public class EnemyScript : MonoBehaviour
         enemy.AttacTrigger();
 
         if (enemy.IsDead1)
+        {
+            if (name == "Creep")
+            {
+                GameController.CurEnemyCount--;
+            }
+            if (GameController.TotalEnemyCount < 20)
+            {
+                if (GameController.CurEnemyCount < GameController.TotalEnemyCount)
+                {
+                    GameController.EnemySpawnPoints[Random.Range(0, GameController.EnemySpawnPoints.Count)].SendMessage("SpawnCreeps");
+                }
+            }
+            else
+            {
+                if (GameController.CurEnemyCount == 4)
+                {
+                    GameController.EnemySpawnPoints[Random.Range(0, GameController.EnemySpawnPoints.Count)].SendMessage("SpawnBoss");
+                }
+                else if (GameController.CurEnemyCount == 0)
+                {
+                    //Time.timeScale = 0;
+                }
+            }
             Destroy(gameObject);
+        }
     }
 
     void OnTriggerEnter(Collider col)

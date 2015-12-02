@@ -21,7 +21,7 @@ public class SpellBehaviour : MonoBehaviour
     {
         if (col.tag == "Enemy" && !col.isTrigger)
         {
-            col.GetComponent<EnemyScript>().enemy.TakeDamage(spell.SpellDamage1);
+            col.GetComponent<EnemyScript>().enemy.TakeDamage(spell);
             Destroy(gameObject);
         }
     }

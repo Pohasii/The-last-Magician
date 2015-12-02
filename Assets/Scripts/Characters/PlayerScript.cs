@@ -10,12 +10,11 @@ public class PlayerScript : MonoBehaviour
     Rigidbody myRigidBody;
 
     public float HP;
-    public float MP;
     public float MoveSpeed;
     public float HPRegen;
-    public float MPRegen;
+
     public List<Spell> Spells;
-    public Transform SellSpawnPos;
+    public Transform SpellSpawnPos;
 
     public Slider HpSlider;
     public Image DamageImage;
@@ -34,8 +33,8 @@ public class PlayerScript : MonoBehaviour
         myRigidBody = GetComponent<Rigidbody>();
         Spells = GameController.PlayerSpells;
         ScoreRune = GameObject.Find("RuneScore").GetComponent<Text>();
-        //Spells = GameObject.FindGameObjectWithTag("GameController").GetComponent<SpellSDataBase>().Spells;
-        player = new Player(myTransform, myRigidBody, Spells, HP, MP, MoveSpeed, HPRegen, MPRegen, HpSlider, DamageImage);
+        //Spells = SpellSDataBase.Spells;
+        player = new Player(myTransform, myRigidBody, Spells, HP, MoveSpeed, HPRegen, HpSlider, DamageImage);
 
         float x = 10;
         float y = -40;
@@ -45,7 +44,7 @@ public class PlayerScript : MonoBehaviour
             GameObject fireRune = Instantiate(RRuneObj);
             GameObject frostRune = Instantiate(RRuneObj);
             GameObject ArcaneRune = Instantiate(RRuneObj);
-           
+
             fireRune.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").GetComponent<RectTransform>());
             frostRune.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").GetComponent<RectTransform>());
             ArcaneRune.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").GetComponent<RectTransform>());
@@ -68,12 +67,11 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    bool CheckRuneCD(Spell spell)
+    public bool CheckRuneCD(Spell spell)
     {
         bool isSuitable = true;
         bool isTested = true;
         List<GameObject> hz = new List<GameObject>();
-
         for (int i = 0; i < spell.ComponentsOfSpell1.Count; i++)
         {
             for (int k = 0; k < RRune.Count; k++)
@@ -103,7 +101,32 @@ public class PlayerScript : MonoBehaviour
         return isSuitable;
     }
 
-    void RuneCoolDown(Spell spell)
+    public void RuneCoolDown(Spell spell, bool hzCD)
+    {
+        for (int i = 0; i < spell.ComponentsOfSpell1.Count; i++)
+        {
+            for (int k = 0; k < RRune.Count; k++)
+            {
+                if (!hzCD)
+                {
+                    if (spell.ComponentsOfSpell1[i] == RRune[k].GetComponent<ScriptResourceRune>().element && RRune[k].GetComponent<ScriptResourceRune>().CurCoolDown <= 0)
+                    {
+                        RRune[k].GetComponent<ScriptResourceRune>().StartCD(false);
+                        break;
+                    }
+                }
+                else
+                {
+                    if (RRune[k].GetComponent<ScriptResourceRune>().CurCoolDown > 0)
+                    {
+                        RRune[k].GetComponent<ScriptResourceRune>().ContinueCD();
+                    }
+                }
+            }
+        }
+    }
+
+    public void RuneCoolDown(Spell spell)
     {
         for (int i = 0; i < spell.ComponentsOfSpell1.Count; i++)
         {
@@ -111,7 +134,7 @@ public class PlayerScript : MonoBehaviour
             {
                 if (spell.ComponentsOfSpell1[i] == RRune[k].GetComponent<ScriptResourceRune>().element && RRune[k].GetComponent<ScriptResourceRune>().CurCoolDown <= 0)
                 {
-                    RRune[k].GetComponent<ScriptResourceRune>().StartCD();
+                    RRune[k].GetComponent<ScriptResourceRune>().StartCD(true);
                     break;
                 }
             }
@@ -120,19 +143,15 @@ public class PlayerScript : MonoBehaviour
 
     void SpellCast(int i)
     {
-        if (CheckRuneCD(Spells[i]))
-        {
-            Transform Parametr = null;
+        Transform Parametr = null;
 
-            if (Spells[i].SpellName1 == "Fire Ball")
-                Parametr = SellSpawnPos;
+        if (Spells[i].SpellName1 == "FireBall")
+            Parametr = SpellSpawnPos;
 
-            if (Spells[i].SpellName1 == "Blink")
-                Parametr = myTransform;
+        if (Spells[i].SpellName1 == "Blink")
+            Parametr = myTransform;
 
-            Spells[i].SpellCast(Parametr, cameraTransform);
-            RuneCoolDown(Spells[i]);
-        }
+        Spells[i].SpellCast(Parametr, cameraTransform);
     }
 
     void FixedUpdate()
@@ -145,9 +164,9 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
-
         if (Input.GetKeyDown(KeyCode.Alpha1))
             SpellCast(0);
+        Spells[0].StartPointsSetup(SpellSpawnPos, cameraTransform);
         if (Input.GetKeyDown(KeyCode.Alpha2))
             SpellCast(1);
         if (Input.GetKeyDown(KeyCode.Alpha3))

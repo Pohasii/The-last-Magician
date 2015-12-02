@@ -14,7 +14,7 @@ public class ScriptResourceRune : MonoBehaviour
     void Start()
     {
         myTransform = GetComponent<Transform>();
-        maxCoolDown = 10;
+        maxCoolDown = 0;
         GetComponent<Image>().color = element.Color1;
     }
 

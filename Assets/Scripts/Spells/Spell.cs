@@ -133,9 +133,9 @@ public class DamageSpell : Spell
 
         foreach (SpellPoints SP in sp)
         {
-            if (SP.pointsReady)
+            //if (SP.pointsReady)
             {
-                GameObject ob = (GameObject)GameObject.Instantiate(SpellObj, SP.pointsPos, SP.point1Obj.transform.rotation);
+                GameObject ob = (GameObject)GameObject.Instantiate(SpellObj, SpawnPos.position, cameraTransform.rotation);// SP.pointsPos, SP.point1Obj.transform.rotation);
                 ob.GetComponent<SpellBehaviour>().spell = this;
                 SP.DestroyPoints(false);
                 playerScipt.RuneCoolDown(this, true);

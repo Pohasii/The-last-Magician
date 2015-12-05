@@ -26,6 +26,8 @@ public class PlayerScript : MonoBehaviour
     public GameObject RRuneObj;
     public List<GameObject> RRune = new List<GameObject>();
 
+    int NumOfActiveSpell;
+
     void Awake()
     {
         myTransform = GetComponent<Transform>();
@@ -141,17 +143,21 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    void SpellCast(int i)
+    void SpellCast()
     {
-        Transform Parametr = null;
+        Spells[NumOfActiveSpell].StartPointsSetup(SpellSpawnPos, cameraTransform);
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Transform Parametr = null;
 
-        if (Spells[i].SpellName1 == "FireBall")
-            Parametr = SpellSpawnPos;
+            if (Spells[NumOfActiveSpell].SpellName1 == "FireBall")
+                Parametr = SpellSpawnPos;
 
-        if (Spells[i].SpellName1 == "Blink")
-            Parametr = myTransform;
+            if (Spells[NumOfActiveSpell].SpellName1 == "Blink")
+                Parametr = myTransform;
 
-        Spells[i].SpellCast(Parametr, cameraTransform);
+            Spells[NumOfActiveSpell].SpellCast(Parametr, cameraTransform);
+        }
     }
 
     void FixedUpdate()
@@ -164,15 +170,20 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-            SpellCast(0);
-        Spells[0].StartPointsSetup(SpellSpawnPos, cameraTransform);
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-            SpellCast(1);
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-            SpellCast(2);
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            Spells[NumOfActiveSpell].RemoveSpellPoints();
+            NumOfActiveSpell--;
+        }
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            Spells[NumOfActiveSpell].RemoveSpellPoints();
+            NumOfActiveSpell++;
+        }
 
-        ScoreRune.text = GameController.RuneCount.ToString();
+        SpellCast();
+
+        ScoreRune.text = NumOfActiveSpell.ToString();//GameController.RuneCount.ToString();
 
         player.Turning();
         player.DamagedEffect();

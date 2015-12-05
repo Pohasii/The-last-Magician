@@ -31,6 +31,11 @@ public class EnemyScript : MonoBehaviour
         enemy.Move(myTransform);
         enemy.AttacTrigger();
 
+        RespNewEnemy();
+    }
+
+    void RespNewEnemy()
+    {
         if (enemy.IsDead1)
         {
             if (name == "Creep")

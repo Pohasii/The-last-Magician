@@ -16,6 +16,8 @@ public class Menu : MonoBehaviour
     public List<GameObject> SlotsForElements = new List<GameObject>();
     public List<GameObject> ElementsObjInSlot = new List<GameObject>();
 
+    public GameObject UISpellPrefab, UIElementPrefab;
+
     [SerializeField]
     private GameObject ToolTip;
 
@@ -58,14 +60,14 @@ public class Menu : MonoBehaviour
         ToolTip.SetActive(false);
     }
 
-    public void ElementCheck(List<Spell> spell, GameObject SpellObj)
+    public void ElementCheck()
     {
         bool IsSpell = false;
-        for (int i = 0; i < spell.Count; i++)
+        for (int i = 0; i < SpellSDataBase.Spells.Count; i++)
         {
-            for (int j = 0; j < spell.Count; j++)
+            for (int j = 0; j < 3; j++)
             {
-                if (spell[i].ComponentsOfSpell1[j] != ElementsInSlots[j])
+                if (SpellSDataBase.Spells[i].ComponentsOfSpell1[j] != ElementsInSlots[j])
                 {
                     IsSpell = false;
                     break;
@@ -77,7 +79,7 @@ public class Menu : MonoBehaviour
             }
             if (IsSpell)
             {
-                CreateSpell(spell[i], SpellObj);
+                CreateSpell(SpellSDataBase.Spells[i]);
                 for (int k = 0; k < ElementsInSlots.Count; k++)
                 {
                     ElementsInSlots[k] = new Element();
@@ -87,13 +89,13 @@ public class Menu : MonoBehaviour
         }
     }
 
-    public void CreateSpell(Spell CreatedSpell, GameObject SpellObj)
+    public void CreateSpell(Spell CreatedSpell)
     {
         for (int i = 0; i < SpellInSlot.Count; i++)
         {
             if (SpellInSlot[i].SpellName1 == null)
             {
-                GameObject ob = (GameObject)Instantiate(SpellObj, Vector3.down * 5, Quaternion.identity);
+                GameObject ob = (GameObject)Instantiate(UISpellPrefab, Vector3.down * 5, Quaternion.identity);
                 SpellInSlot[i] = CreatedSpell;
                 SpellsObjInSlot[i] = ob;
                 ob.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").GetComponent<RectTransform>());
@@ -105,11 +107,11 @@ public class Menu : MonoBehaviour
         }
     }
 
-    public void ElementSpawn(GameObject ElementObj, Element p_element)
+    public void ElementSpawn(Element p_element)
     {
         if (GameController.RuneCount >= p_element.Cost1)
         {
-            GameObject ob = (GameObject)Instantiate(ElementObj, Vector3.up * 10, Quaternion.identity);
+            GameObject ob = (GameObject)Instantiate(UIElementPrefab, Vector3.up * 10, Quaternion.identity);
             GameController.RuneCount -= p_element.Cost1;
             ob.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").GetComponent<RectTransform>());
             ob.GetComponent<ElementScript>().element = p_element;

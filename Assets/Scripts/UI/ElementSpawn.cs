@@ -24,6 +24,6 @@ public class ElementSpawn : MonoBehaviour, IPointerDownHandler, IPointerEnterHan
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        menu.ElementSpawn(ElementObj, element);
+        menu.ElementSpawn(element);
     }
 }

@@ -13,16 +13,31 @@ public class SpellBehaviour : MonoBehaviour
 
     void Update()
     {
-        myTransform.Translate(Vector3.forward * 2, Space.Self);
-        Destroy(this.gameObject, 2);
+        spell.SpellBehaviour(myTransform);
     }
 
     void OnTriggerEnter(Collider col)
     {
-        if (col.tag == "Enemy" && !col.isTrigger)
+        if (spell.SBT == Spell.SpellBehaviourType.Single && col.tag == "Enemy" && !col.isTrigger)
         {
             col.GetComponent<EnemyScript>().enemy.TakeDamage(spell);
-            Destroy(gameObject);
+            myTransform.GetComponent<AudioSource>().Play();
+        }
+    }
+
+    void OnTriggerStay(Collider col)
+    {
+        if (spell.SBT == Spell.SpellBehaviourType.DOT && col.tag == "Enemy" && !col.isTrigger)
+        {
+            col.GetComponent<EnemyScript>().enemy.TakeDamage(spell);
+        }
+    }
+
+    void OnParticleCollision(GameObject go)
+    {
+        if (go.tag == "Enemy")
+        {
+            go.GetComponent<EnemyScript>().enemy.TakeDamage(spell);
         }
     }
 }

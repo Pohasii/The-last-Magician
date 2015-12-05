@@ -15,7 +15,7 @@ public class CreateSpell : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        menu.ElementCheck(SpellSDataBase.Spells, SpellObj);
+        menu.ElementCheck();
     }
 
     public void OnPointerEnter(PointerEventData eventData)

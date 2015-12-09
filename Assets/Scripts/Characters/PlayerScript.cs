@@ -30,13 +30,16 @@ public class PlayerScript : MonoBehaviour
 
     void Awake()
     {
+        Spell.playerScript = GetComponent<PlayerScript>();
         myTransform = GetComponent<Transform>();
         cameraTransform = Camera.main.transform;
         myRigidBody = GetComponent<Rigidbody>();
         Spells = GameController.PlayerSpells;
         ScoreRune = GameObject.Find("RuneScore").GetComponent<Text>();
         //Spells = SpellSDataBase.Spells;
-        player = new Player(myTransform, myRigidBody, Spells, HP, MoveSpeed, HPRegen, HpSlider, DamageImage);
+        Player.damageImage = DamageImage;
+        Player.playerHPSlider = HpSlider;
+        player = new Player(myTransform, myRigidBody, Spells, HP, MoveSpeed, HPRegen);
 
         float x = 10;
         float y = -40;
@@ -145,18 +148,44 @@ public class PlayerScript : MonoBehaviour
 
     void SpellCast()
     {
-        Spells[NumOfActiveSpell].StartPointsSetup(SpellSpawnPos, cameraTransform);
-        if (Input.GetKeyDown(KeyCode.R))
+        Spell.keyClick = Input.GetKeyDown(KeyCode.R);
+        Transform Parametr = null;
+
+        if (Spells[NumOfActiveSpell].SpellName1 == "Blink")
+            Parametr = myTransform;
+        else
+            Parametr = SpellSpawnPos;
+
+        Spells[NumOfActiveSpell].SpellCast(Parametr, cameraTransform);
+    }
+
+    void Update()
+    {
+        SpellChange();
+
+        SpellCast();
+
+        ScoreRune.text = NumOfActiveSpell.ToString();//GameController.RuneCount.ToString();
+
+        player.Turning();
+        player.DamagedEffect();
+
+        enabled = !player.isDead;
+    }
+
+    void SpellChange()
+    {
+        if (Input.GetKeyDown(KeyCode.G))
         {
-            Transform Parametr = null;
-
-            if (Spells[NumOfActiveSpell].SpellName1 == "FireBall")
-                Parametr = SpellSpawnPos;
-
-            if (Spells[NumOfActiveSpell].SpellName1 == "Blink")
-                Parametr = myTransform;
-
-            Spells[NumOfActiveSpell].SpellCast(Parametr, cameraTransform);
+            if (Spells[NumOfActiveSpell].sp.Count > 0)
+                Spells[NumOfActiveSpell].RemoveSpellPoints();
+            NumOfActiveSpell--;
+        }
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            if (Spells[NumOfActiveSpell].sp.Count > 0)
+                Spells[NumOfActiveSpell].RemoveSpellPoints();
+            NumOfActiveSpell++;
         }
     }
 
@@ -166,28 +195,5 @@ public class PlayerScript : MonoBehaviour
         float v = Input.GetAxisRaw("Vertical");
 
         player.Move(h, v);
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            Spells[NumOfActiveSpell].RemoveSpellPoints();
-            NumOfActiveSpell--;
-        }
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            Spells[NumOfActiveSpell].RemoveSpellPoints();
-            NumOfActiveSpell++;
-        }
-
-        SpellCast();
-
-        ScoreRune.text = NumOfActiveSpell.ToString();//GameController.RuneCount.ToString();
-
-        player.Turning();
-        player.DamagedEffect();
-
-        enabled = !player.IsDead1;
     }
 }

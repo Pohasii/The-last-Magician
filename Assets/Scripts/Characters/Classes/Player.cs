@@ -4,36 +4,19 @@ using System.Collections;
 using System.Collections.Generic;
 
 [System.Serializable]
-public class Player
+public class Player : Character
 {
     Transform myTransform;
     Rigidbody myRigidbody;
 
     Vector3 PlayerMovement;
 
-    float PlayerMaxHP;
-    float PlayerCurHealth;
-    public float PlayerCurHealth1
-    {
-        get { return PlayerCurHealth; }
-        set { PlayerCurHealth = value; }
-    }
-
-    float PlayerMoveSpeed;
-    float PlayerHPRegen;
-
-    Slider healthSlider;
-    Image damageImage;
     float flashSpeed = 5;
     Color flashColor = new Color(1f, 0f, 0f, 0.1f);
 
-    bool damaged = false;
-    bool isDead = false;
-    public bool IsDead1
-    {
-        get { return isDead; }
-        set { isDead = value; }
-    }
+    public static Image damageImage;
+    bool damaged;
+    public bool isDead { get; set; }
 
     Transform cameraTransform;
     private float cameraRotation;
@@ -41,24 +24,24 @@ public class Player
     public float maximumY = 65;
     float rotationSpeed = 15;
 
+    public static Slider playerHPSlider;
+
     public List<Spell> Seplls;
 
-    public Player(Transform mytransform, Rigidbody myrigidbody, List<Spell> p_Spells, float HP, float MoveSpeed, float HPRegen, Slider hpSlider, Image DmgImage)
+    public Player(Transform mytransform, Rigidbody myrigidbody, List<Spell> p_Spells, float p_HP, float p_MoveSpeed, float p_HPRegen)
+        : base(0, p_HP, p_HPRegen, p_MoveSpeed)
     {
+        isDead = false;
+        damaged = false;
+
         Seplls = p_Spells;
-        PlayerMaxHP = HP;
-        PlayerCurHealth = HP;
-        PlayerMoveSpeed = MoveSpeed;
-        PlayerHPRegen = HPRegen;
 
         myTransform = mytransform;
         myRigidbody = myrigidbody;
 
-        hpSlider.maxValue = PlayerMaxHP;
-        hpSlider.value = PlayerMaxHP;
-        healthSlider = hpSlider;
-
-        damageImage = DmgImage;
+        hpSlider = playerHPSlider;
+        hpSlider.maxValue = MaxHP;
+        hpSlider.value = MaxHP;
 
         cameraTransform = Camera.main.transform;
     }
@@ -67,7 +50,7 @@ public class Player
     {
         PlayerMovement.Set(h, 0f, v);
 
-        PlayerMovement = PlayerMovement.normalized * PlayerMoveSpeed * Time.deltaTime;
+        PlayerMovement = PlayerMovement.normalized * MoveSpeed * Time.deltaTime;
         PlayerMovement = myTransform.TransformDirection(PlayerMovement);
 
         myRigidbody.MovePosition(myTransform.position + PlayerMovement);
@@ -94,21 +77,20 @@ public class Player
         damaged = false;
     }
 
-    public void TakeDamage(float Damage)
+    public void TakeDamageBase(float Damage)
     {
         damaged = true;
+        CurHP -= Damage;
+        hpSlider.value = CurHP;
 
-        PlayerCurHealth1 -= Damage;
-        healthSlider.value = PlayerCurHealth1;
-
-        if (PlayerCurHealth1 <= 0 && !IsDead1)
+        if (CurHP <= 0 && !isDead)
         {
-            Death();
+            isDead = true;
         }
     }
 
-    void Death()
+    public override void TakeDamage(DamageSpell SpellInfo)
     {
-        IsDead1 = true;
+        TakeDamageBase(SpellInfo.SpellDamage1);
     }
 }

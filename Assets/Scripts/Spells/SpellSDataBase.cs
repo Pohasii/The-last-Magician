@@ -5,15 +5,11 @@ using System.Collections.Generic;
 
 public class SpellSDataBase : MonoBehaviour
 {
-    public List<GameObject> SpellObj = new List<GameObject>();
-
     public static List<Spell> Spells = new List<Spell>();
 
+    public static List<Element> ElementsInDB = new List<Element>();
     public static Element FireElement, FrostElement, ArcaneElement;
 
-    public static List<Element> ElementsInDB = new List<Element>();
-
-    public List<Material> SpellMaterial = new List<Material>();
     public List<Material> ElementMaterial = new List<Material>();
     public Material LineMaterial;
     public GameObject pointObj;
@@ -23,7 +19,7 @@ public class SpellSDataBase : MonoBehaviour
     List<Element> FrostBoltElements = new List<Element>();
     List<Element> BlinkElements = new List<Element>();
     List<Element> FireAreaElements = new List<Element>();
-    //List<Element> ElementsOfFireBall = new List<Element>();
+    List<Element> BombElements = new List<Element>();
     //List<Element> ElementsOfFireBall = new List<Element>();
     //List<Element> ElementsOfFireBall = new List<Element>();
     //List<Element> ElementsOfFireBall = new List<Element>();
@@ -50,13 +46,14 @@ public class SpellSDataBase : MonoBehaviour
     void Awake()
     {
         SpellPoints.lineMaterial = LineMaterial;
-        ElementsInDB.Add(new Element("Fire", "Кароче это огонь", 10, new Vector3(50, 0, -20), ElementMaterial[0], Color.red));
-        ElementsInDB.Add(new Element("Frost", "Кароче это лед", 10, new Vector3(100, 0, -20), ElementMaterial[1], Color.blue));
-        ElementsInDB.Add(new Element("Arcane", "Кароче это тайная магия", 10, new Vector3(150, 0, -20), ElementMaterial[2], Color.cyan));
 
-        FireElement = ElementsInDB[0];
-        FrostElement = ElementsInDB[1];
-        ArcaneElement = ElementsInDB[2];
+        FireElement = new Element("Fire", "Кароче это огонь", 10, new Vector3(50, 0, -20), ElementMaterial[0], Color.red);
+        FrostElement = new Element("Frost", "Кароче это лед", 10, new Vector3(100, 0, -20), ElementMaterial[1], Color.blue);
+        ArcaneElement = new Element("Arcane", "Кароче это тайная магия", 10, new Vector3(150, 0, -20), ElementMaterial[2], Color.cyan);
+
+        ElementsInDB.Add(FireElement);
+        ElementsInDB.Add(FrostElement);
+        ElementsInDB.Add(ArcaneElement);
 
         /////////////////////////////////////////
         FireBallElements.Add(FireElement);
@@ -74,11 +71,16 @@ public class SpellSDataBase : MonoBehaviour
         FireAreaElements.Add(FireElement);
         FireAreaElements.Add(FireElement);
         FireAreaElements.Add(FrostElement);
+        //////
+        BombElements.Add(FireElement);
+        BombElements.Add(FrostElement);
+        BombElements.Add(FrostElement);
         /////////////////////////////////////////
 
-        Spells.Add(new DamageSpell(Spell.SpellCastType.NoPoints, Spell.SpellBehaviourType.Single, "FireBall", "Damage", SpellMaterial[0], pointObj, SpellObj[0], FireBallElements, 25f, 2f, 2f, DamageSpell.SpellDamageTypes.Fire));
-        Spells.Add(new DamageSpell(Spell.SpellCastType.NoPoints, Spell.SpellBehaviourType.Single, "FrostBolt", "Slow", SpellMaterial[1], pointObj, SpellObj[1], FrostBoltElements, 1f, 1f, 2f, DamageSpell.SpellDamageTypes.Frost));
-        Spells.Add(new DamageSpell(Spell.SpellCastType.OnePoint, Spell.SpellBehaviourType.DOT, "Fire area", "Pian", SpellMaterial[3], pointObj, SpellObj[2], FireAreaElements, 10f * Time.deltaTime, 2f, 20f, DamageSpell.SpellDamageTypes.Fire));
-        Spells.Add(new MovementSpell(Spell.SpellCastType.NoPoints, Spell.SpellBehaviourType.Single, "Blink", "Blink111", SpellMaterial[2], BlinkElements, 0f, 0, 15f));
+        Spells.Add(new SWNP("FireBall", "p_Damage", pointObj, FireBallElements, 25f, 2f, 2f, DamageSpell.SpellDamageTypes.Fire));
+        Spells.Add(new DamageSpell("FrostBolt", "Slow", pointObj, FrostBoltElements, 1f, 1f, 2f, DamageSpell.SpellDamageTypes.Frost));
+        Spells.Add(new SWOP("Fire area", "Pian", pointObj, FireAreaElements, 10f * Time.deltaTime, 2f, 20f, DamageSpell.SpellDamageTypes.Fire));
+        Spells.Add(new SWOP("Bomb", "BOOM", pointObj, BombElements, 5, 35, 2, 10, DamageSpell.SpellDamageTypes.Fire));
+        Spells.Add(new MovementSpell("Blink", "Blink111", BlinkElements, 0f, 0, 15f));
     }
 }

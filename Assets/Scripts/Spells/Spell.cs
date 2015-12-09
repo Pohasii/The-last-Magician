@@ -6,149 +6,134 @@ using System.Collections.Generic;
 [System.Serializable]
 public class Spell
 {
-    private string SpellName;
+    string SpellName;
+    string SpellDescription;
+    float SpellLifeTime;
+    List<Element> ComponentsOfSpell;
+
+    Vector3 StartPos;
+    Material material;
+
+    protected float SpellCastTime;
+
+    public List<SpellPoints> sp = new List<SpellPoints>();
+    public enum SpellBehaviourType { Single, Other }
+    public GameObject PointObj;//префаб точки
+    public static bool keyClick;
+    public static PlayerScript playerScript;
+
     public string SpellName1
     {
         get { return SpellName; }
         set { SpellName = value; }
     }
-
-    private string SpellDescription;
     public string SpellDescription1
     {
         get { return SpellDescription; }
         set { SpellDescription = value; }
     }
-
-    protected float SpellCastTime;
-
-    private float SpellLifeTime;
     public float SpellLifeTime1
     {
         get { return SpellLifeTime; }
         set { SpellLifeTime = value; }
     }
-
-    Vector3 StartPos;
     public Vector3 StartPos1
     {
         get { return StartPos; }
         set { StartPos = value; }
     }
-
-    Material material;
     public Material Material1
     {
         get { return material; }
         set { material = value; }
     }
-
-    private List<Element> ComponentsOfSpell;
     public List<Element> ComponentsOfSpell1
     {
         get { return ComponentsOfSpell; }
         set { ComponentsOfSpell = value; }
     }
 
-    public List<SpellPoints> sp = new List<SpellPoints>();
-
-    public enum SpellBehaviourType { Single, DOT }
-    private SpellBehaviourType Sbt;
-    public SpellBehaviourType SBT
-    {
-        get { return Sbt; }
-        set { Sbt = value; }
-    }
-
-    public enum SpellCastType { NoPoints, OnePoint, TwoPoints }
-    private SpellCastType Sct;
-    public SpellCastType SCT
-    {
-        get { return Sct; }
-        set { Sct = value; }
-    }
-
-    protected PlayerScript playerScript;
-    public GameObject PointObj;//префаб точки
-
     public Spell()
     { }
 
-    public Spell(SpellCastType p_SCT, SpellBehaviourType p_SBT, string p_Name, string p_Description, Material p_Material, List<Element> Components, float CastTime, float p_LifeTime)
+    public Spell(string p_Name, string p_Description, List<Element> Components, float CastTime, float p_LifeTime)
     {
-        Sct = p_SCT;
-        Sbt = p_SBT;
         SpellName = p_Name;
         SpellDescription = p_Description;
-        material = p_Material;
         ComponentsOfSpell = Components;
         SpellCastTime = CastTime;
         SpellLifeTime = p_LifeTime;
+
+        material = Resources.Load<Material>("SpellMaterial/" + p_Name);
     }
 
-    public virtual void StartPointsSetup(Transform SpawnPos, Transform cameraTransform)
-    {
-        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerScript>();
-        if (Input.GetKeyDown(KeyCode.Q) && playerScript.CheckRuneCD(this))
-        {
-            if (sp.Count > 0)//если экземпляров класса SpellPoints больше чем 1, то проверят возможность создания нового екземпляра
-            {
-                if (!sp[sp.Count - 1].pointsSetup)
-                    sp.Add(new SpellPoints());
-                else//убить последний экземпляр класса SpellPoints
-                {
-                    RemoveSpellPoints();
-                }
-            }
-            else
-                sp.Add(new SpellPoints());//если экземпляров класса SpellPoints еще нет, то создает новый экземпляр этого класса
-        }
-        for (int i = 0; i < sp.Count; i++)
-            sp[i].SetapPoints(SpawnPos, cameraTransform, this);//вызов у последнего экземпляра класса SpellPoints функции уставки точек
-    }
 
     public virtual void SpellCast(Transform SpawnPos, Transform cameraTransform)
     {
-
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (playerScript.CheckRuneCD(this))
+            {
+                if (sp.Count > 0)//если экземпляров класса SpellPoints больше чем 1, то проверят возможность создания нового екземпляра
+                {
+                    if (!sp[sp.Count - 1].PointsSetup)
+                        sp.Add(new SpellPoints());
+                    else//убить последний экземпляр класса SpellPoints
+                    {
+                        RemoveSpellPoints();
+                    }
+                }
+                else
+                    sp.Add(new SpellPoints());//если экземпляров класса SpellPoints еще нет, то создает новый экземпляр этого класса
+            }
+            else
+            {
+                CharacterUIController.SetTextTrigger("Not enough runes");
+            }
+        }
+        SpellCastInvoke(SpawnPos, cameraTransform);
     }
 
-    public virtual void RemoveSpellPoints(SpellPoints p_sp)
+    public virtual void SpellCastBase(Transform SpawnPos, Transform cameraTransform)
     {
-        sp.Remove(p_sp);
+        if (!playerScript.CheckRuneCD(this))
+        {
+            CharacterUIController.SetTextTrigger("Not enough runes");
+        }
+    }
+
+    public void SpellCastInvoke(Transform SpawnPos, Transform cameraTransform)
+    {
+        if (keyClick)
+        {
+            SpellCastBase(SpawnPos, cameraTransform);
+        }
+    }
+
+
+    public void RemoveSpellPointsBase()
+    {
         if (sp.Count > 0)
         {
-            if (sp[sp.Count - 1].pointsSetup)
+            if (sp[sp.Count - 1].PointsSetup)
             {
-                sp[sp.Count - 1].DestroyPoints(true);
+                sp[sp.Count - 1].DestroyPoints();
                 sp[sp.Count - 1] = null;
                 sp.RemoveAt(sp.Count - 1);
             }
         }
     }
 
-    public virtual void RemoveSpellPoints()
+    public void RemoveSpellPoints(SpellPoints p_sp)
+    {
+        RemoveSpellPointsBase();
+        sp.Remove(p_sp);
+    }
+
+    public void RemoveSpellPoints()
     {
         playerScript.RuneCoolDown(this, true);
-        if (sp.Count > 0)
-        {
-            if (sp[sp.Count - 1].pointsSetup)
-            {
-                sp[sp.Count - 1].DestroyPoints(true);
-                sp[sp.Count - 1] = null;
-                sp.RemoveAt(sp.Count - 1);
-            }
-        }
-    }
-
-    public void SpellBehaviour(Transform SpellTransform)
-    {
-        if (Sbt == SpellBehaviourType.Single)
-        {
-            SpellTransform.Translate(Vector3.forward * 2, Space.Self);
-            GameObject.Destroy(SpellTransform.gameObject, SpellLifeTime);
-        }
-        else
-            GameObject.Destroy(SpellTransform.gameObject, SpellLifeTime);
+        RemoveSpellPointsBase();
     }
 }
 
@@ -172,66 +157,104 @@ public class DamageSpell : Spell
         set { SpellObj = value; }
     }
 
-    public DamageSpell(SpellCastType p_SCT, SpellBehaviourType p_SBT, string p_Name, string p_Description, Material p_Material, GameObject pointObj, GameObject p_SpellObj, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
-        : base(p_SCT, p_SBT, p_Name, p_Description, p_Material, Components, CastTime, p_LifeTime)
+    public DamageSpell(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
+        : base(p_Name, p_Description, Components, CastTime, p_LifeTime)
     {
         PointObj = pointObj;
         SpellDamage = Damage;
-        SpellObj = p_SpellObj;
         SpellDamageType = DamageType;
-    }
 
-    public override void StartPointsSetup(Transform SpawnPos, Transform cameraTransform)
+        SpellObj = Resources.Load<GameObject>("SpellsPrefab/" + p_Name);
+    }
+}
+
+public class SWNP : DamageSpell
+{
+    public SWNP(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
+        : base(p_Name, p_Description, pointObj, Components, Damage, CastTime, p_LifeTime, DamageType)
     {
-        base.StartPointsSetup(SpawnPos, cameraTransform);
     }
 
     public override void SpellCast(Transform SpawnPos, Transform cameraTransform)
     {
-        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerScript>();
-        if (SCT == SpellCastType.NoPoints)
+        base.SpellCastInvoke(SpawnPos, cameraTransform);
+    }
+
+    public override void SpellCastBase(Transform SpawnPos, Transform cameraTransform)
+    {
+        base.SpellCastBase(SpawnPos, cameraTransform);
+        if (playerScript.CheckRuneCD(this))
         {
-            base.SpellCast(SpawnPos, cameraTransform);
-            if (playerScript.CheckRuneCD(this))
-            {
-                GameObject ob = (GameObject)GameObject.Instantiate(SpellObj, SpawnPos.position, cameraTransform.rotation);
-                ob.GetComponent<SpellBehaviour>().spell = this;
-                playerScript.RuneCoolDown(this);
-            }
+            GameObject ob = (GameObject)GameObject.Instantiate(SpellObj1, SpawnPos.position, cameraTransform.rotation);
+            ob.SendMessage("SpellSetap", this);
+            playerScript.RuneCoolDown(this);
         }
-        else
-            if (SCT == SpellCastType.OnePoint)
+    }
+}
+
+public class SWOP : DamageSpell
+{
+    float radius;
+    public float Radius
+    {
+        get { return radius; }
+        set { radius = value; }
+    }
+
+    public SWOP(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
+        : base(p_Name, p_Description, pointObj, Components, Damage, CastTime, p_LifeTime, DamageType)
+    {
+    }
+
+    public SWOP(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float p_Radius, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
+        : this(p_Name, p_Description, pointObj, Components, Damage, CastTime, p_LifeTime, DamageType)
+    {
+        Radius = p_Radius;
+    }
+
+    public override void SpellCast(Transform SpawnPos, Transform cameraTransform)
+    {
+        base.SpellCast(SpawnPos, cameraTransform);
+        for (int i = 0; i < sp.Count; i++)
+            sp[i].SetapPoint(SpawnPos, cameraTransform, this);//вызов у последнего экземпляра класса SpellPoints функции уставки точек
+    }
+
+    public override void SpellCastBase(Transform SpawnPos, Transform cameraTransform)
+    {
+        if (sp.Count > 0 && sp[sp.Count - 1].PointsSetup)
+        {
+            GameObject ob = (GameObject)GameObject.Instantiate(SpellObj1, sp[sp.Count - 1].MainPoint.transform.position - Vector3.up, Quaternion.identity);
+            ob.SendMessage("SpellSetap", this);
+            playerScript.RuneCoolDown(this);
+            RemoveSpellPoints(sp[sp.Count - 1]);
+        }
+    }
+}
+
+public class SWTP : DamageSpell
+{
+    public SWTP(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
+        : base(p_Name, p_Description, pointObj, Components, Damage, CastTime, p_LifeTime, DamageType)
+    {
+
+    }
+
+    public override void SpellCast(Transform SpawnPos, Transform cameraTransform)
+    {
+        base.SpellCast(SpawnPos, cameraTransform);
+        for (int i = 0; i < sp.Count; i++)
+            sp[i].SetapPoints(SpawnPos, cameraTransform, this);//вызов у последнего экземпляра класса SpellPoints функции уставки точек
+    }
+
+    public override void SpellCastBase(Transform SpawnPos, Transform cameraTransform)
+    {
+            if (sp[sp.Count - 1].PointsReady)
             {
-                if (sp[sp.Count - 1].pointsSetup)
-                {
-                    GameObject ob = (GameObject)GameObject.Instantiate(SpellObj, sp[sp.Count - 1].mainPoint.transform.position - Vector3.up, Quaternion.identity);
-                    ob.GetComponent<SpellBehaviour>().spell = this;
-                    playerScript.RuneCoolDown(this, true);
-                    sp[sp.Count - 1].DestroyPoints(true);
-                    RemoveSpellPoints(sp[sp.Count - 1]);
-                }
+                GameObject ob = (GameObject)GameObject.Instantiate(SpellObj1, sp[sp.Count - 1].Point1Obj.transform.position, sp[sp.Count - 1].Point1Obj.transform.rotation);
+                ob.SendMessage("SpellSetap", this);
+                sp[sp.Count - 1].DestroyPoints();
+                RemoveSpellPoints();
             }
-            else
-                if (SCT == SpellCastType.TwoPoints)
-                {
-                    foreach (SpellPoints SP in sp)
-                    {
-                        if (SP.pointsReady)
-                        {
-                            GameObject ob = (GameObject)GameObject.Instantiate(SpellObj, SP.point1Obj.transform.position, SP.point1Obj.transform.rotation);//SpawnPos.position, cameraTransform.rotation);//SP.pointsPos, SP.point1Obj.transform.rotation);
-                            ob.GetComponent<SpellBehaviour>().spell = this;
-                            SP.DestroyPoints(false);
-                            playerScript.RuneCoolDown(this, true);
-                        }
-                    }
-                    for (int i = 0; i < sp.Count; i++)
-                    {
-                        if (sp[i].pointsReady)
-                        {
-                            RemoveSpellPoints(sp[i]);
-                        }
-                    }
-                }
     }
 }
 
@@ -242,16 +265,20 @@ public class MovementSpell : Spell
     LayerMask BarrierMask = LayerMask.GetMask("Barrier");
     LayerMask FloorMask = LayerMask.GetMask("Floor");
 
-    public MovementSpell(SpellCastType p_SCT, SpellBehaviourType p_SBT, string p_Name, string p_Description, Material p_Material, List<Element> Components, float CastTime, float p_LifeTime, float TeleportDistance)
-        : base(p_SCT, p_SBT, p_Name, p_Description, p_Material, Components, CastTime, p_LifeTime)
+    public MovementSpell(string p_Name, string p_Description, List<Element> Components, float CastTime, float p_LifeTime, float TeleportDistance)
+        : base(p_Name, p_Description, Components, CastTime, p_LifeTime)
     {
         SpellTeleportDistance = TeleportDistance;
     }
 
-    public override void SpellCast(Transform myTransform, Transform cameraTransform)
+    public override void SpellCast(Transform SpawnPos, Transform cameraTransform)
     {
-        base.SpellCast(myTransform, cameraTransform);
-        PlayerScript playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerScript>();
+        base.SpellCastInvoke(SpawnPos, cameraTransform);
+    }
+
+    public override void SpellCastBase(Transform myTransform, Transform cameraTransform)
+    {
+        base.SpellCastBase(myTransform, cameraTransform);
         if (playerScript.CheckRuneCD(this))
         {
             playerScript.RuneCoolDown(this);
@@ -282,22 +309,47 @@ public class MovementSpell : Spell
             }
         }
     }
+
 }
 
 [System.Serializable]
 public class SpellPoints
 {
-    public Vector3 pointsPos;//позиция точек
-    public bool pointsSetup, //пока true можно становливать точки
+    Vector3 pointsPos;//позиция точек
+    private bool pointsSetup, //пока true можно становливать точки
         pointsReady = false,//если true - две точки установлены
         once = false;//для одноразового срабатывания функции
-    public GameObject point1Obj, poin2Obj, mainPoint;//объекты точек
+    public bool PointsReady
+    {
+        get { return pointsReady; }
+        set { pointsReady = value; }
+    }
+    public bool PointsSetup
+    {
+        get { return pointsSetup; }
+        set { pointsSetup = value; }
+    }
 
-    public GameObject lineObj, lineObj1;//объект на котором висит компонент LineRenderer
-    public LineRenderer line, line1, mainLine;//ссылка на компонент LineRenderer
+    GameObject point1Obj, poin2Obj, mainPoint;//объекты точек
+    public GameObject MainPoint
+    {
+        get { return mainPoint; }
+        set { mainPoint = value; }
+    }
+    public GameObject Point1Obj
+    {
+        get { return point1Obj; }
+        set { point1Obj = value; }
+    }
+
+    GameObject lineObj, lineObj1;//объект на котором висит компонент LineRenderer
+    LineRenderer line, line1, mainLine;//ссылка на компонент LineRenderer
     public static Material lineMaterial;
 
     PlayerScript playerScript;
+
+    Ray ray;
+    RaycastHit hit;
 
     public SpellPoints()
     {
@@ -305,82 +357,105 @@ public class SpellPoints
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerScript>();
     }
 
+    void MainPointSpawn(Transform SpawnPos, Transform cameraTransform, Spell thisSpell)
+    {
+        if (!once)//одноразовый спавн главной точки
+        {
+            MainPoint = (GameObject)GameObject.Instantiate(thisSpell.PointObj, hit.point + Vector3.up, Quaternion.identity);
+            once = true;
+            mainLine = MainPoint.AddComponent<LineRenderer>();
+            mainLine.SetWidth(0.05f, 0.05f);
+        }
+        pointsPos = hit.point + Vector3.up;
+        MainPoint.transform.position = pointsPos;
+    }
+
+    public void SetapPoint(Transform SpawnPos, Transform cameraTransform, Spell thisSpell)
+    {
+        if (!PointsSetup && !PointsReady)
+        {
+            PointsSetup = true;
+            once = false;
+        }
+        if (PointsSetup)
+        {
+            ray = new Ray(SpawnPos.position, cameraTransform.forward);
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Floor")))
+            {
+                MainPointSpawn(SpawnPos, cameraTransform, thisSpell);
+            }
+        }
+        if (MainPoint)
+        {
+            mainLine.SetPosition(0, pointsPos);
+            mainLine.SetPosition(1, SpawnPos.position);
+            ColorByDistance(pointsPos, SpawnPos.position, ref mainLine);
+        }
+    }
+
     public void SetapPoints(Transform SpawnPos, Transform cameraTransform, Spell thisSpell)
     {
-        if ((thisSpell.SCT == Spell.SpellCastType.TwoPoints || thisSpell.SCT == Spell.SpellCastType.OnePoint))
+        if (!PointsSetup && !PointsReady)
         {
-            if (!pointsSetup && !pointsReady)
+            PointsSetup = true;
+            once = false;
+        }
+        if (PointsSetup)
+        {
+            ray = new Ray(SpawnPos.position, cameraTransform.forward);
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Floor")))
             {
-                pointsSetup = true;
-                once = false;
-                playerScript.RuneCoolDown(thisSpell, false);
-            }
-            if (pointsSetup)
-            {
-                Ray ray = new Ray(SpawnPos.position, cameraTransform.forward);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Floor")))
+                MainPointSpawn(SpawnPos, cameraTransform, thisSpell);
+                if (Input.GetKeyDown(KeyCode.E) && Vector3.Distance(pointsPos, SpawnPos.position) < 10)
                 {
-                    if (!once)//одноразовый спавн главной точки
+                    if (!Point1Obj)//спавн первой точки
                     {
-                        mainPoint = (GameObject)GameObject.Instantiate(thisSpell.PointObj, hit.point + Vector3.up, Quaternion.identity);
-                        once = true;
-                        mainLine = mainPoint.AddComponent<LineRenderer>();
-                        mainLine.SetWidth(0.05f, 0.05f);
-                    }
-                    pointsPos = hit.point + Vector3.up;
-                    mainPoint.transform.position = pointsPos;
+                        Point1Obj = (GameObject)GameObject.Instantiate(thisSpell.PointObj, pointsPos, Quaternion.identity);
+                        lineObj = new GameObject();
+                        line = lineObj.AddComponent<LineRenderer>();
+                        line.SetWidth(0.05f, 0.05f);
+                        line.SetPosition(1, pointsPos);
 
-                    if (thisSpell.SCT == Spell.SpellCastType.TwoPoints && Input.GetKeyDown(KeyCode.E) && Vector3.Distance(pointsPos, SpawnPos.position) < 10)
-                    {
-                        if (!point1Obj)//спавн первой точки
+                        line1 = Point1Obj.AddComponent<LineRenderer>();
+                        line1.SetWidth(0.05f, 0.05f);
+                        line1.SetPosition(0, Point1Obj.transform.position);
+                        playerScript.RuneCoolDown(thisSpell, false);
+                    }
+                    else//если первая точка установлена, то устанавливает вторую точку
+                        if (Vector3.Distance(pointsPos, Point1Obj.transform.position) < 10)
                         {
-                            point1Obj = (GameObject)GameObject.Instantiate(thisSpell.PointObj, pointsPos, Quaternion.identity);
-                            lineObj = new GameObject();
-                            line = lineObj.AddComponent<LineRenderer>();
-                            line.SetWidth(0.05f, 0.05f);
-                            line.SetPosition(1, pointsPos);
-
-                            line1 = point1Obj.AddComponent<LineRenderer>();
-                            line1.SetWidth(0.05f, 0.05f);
-                            line1.SetPosition(0, point1Obj.transform.position);
+                            poin2Obj = (GameObject)GameObject.Instantiate(thisSpell.PointObj, pointsPos, Quaternion.identity);
+                            Point1Obj.transform.LookAt(poin2Obj.transform);
+                            GameObject.Destroy(MainPoint);
+                            //GameObject.Destroy(line1);
+                            PointsSetup = false;
+                            PointsReady = true;
                         }
-                        else//если первая точка установлена, то устанавливает вторую точку
-                            if (Vector3.Distance(pointsPos, point1Obj.transform.position) < 10)
-                            {
-                                poin2Obj = (GameObject)GameObject.Instantiate(thisSpell.PointObj, pointsPos, Quaternion.identity);
-                                point1Obj.transform.LookAt(poin2Obj.transform);
-                                GameObject.Destroy(mainPoint);
-                                //GameObject.Destroy(line1);
-                                pointsSetup = false;
-                                pointsReady = true;
-                            }
-                    }
                 }
             }
-            if (mainPoint)
-            {
-                mainLine.SetPosition(0, pointsPos);
-                mainLine.SetPosition(1, SpawnPos.position);
-                ColorByDistance(pointsPos, SpawnPos.position, ref mainLine);
-            }
+        }
+        if (MainPoint)
+        {
+            mainLine.SetPosition(0, pointsPos);
+            mainLine.SetPosition(1, SpawnPos.position);
+            ColorByDistance(pointsPos, SpawnPos.position, ref mainLine);
+        }
 
-            if (line1)
-            {
-                line1.SetPosition(1, pointsPos);
-                ColorByDistance(pointsPos, point1Obj.transform.position, ref line1);
-            }
-            if (lineObj)
-            {
-                line.SetPosition(0, SpawnPos.position);
-                ColorByDistance(SpawnPos.position, point1Obj.transform.position, ref line);
+        if (line1)
+        {
+            line1.SetPosition(1, pointsPos);
+            ColorByDistance(pointsPos, Point1Obj.transform.position, ref line1);
+        }
+        if (lineObj)
+        {
+            line.SetPosition(0, SpawnPos.position);
+            ColorByDistance(SpawnPos.position, Point1Obj.transform.position, ref line);
 
-                if (Vector3.Distance(SpawnPos.position, point1Obj.transform.position) > 15)
-                {
-                    playerScript.RuneCoolDown(thisSpell, true);
-                    DestroyPoints(true);
-                    thisSpell.RemoveSpellPoints(this);
-                }
+            if (Vector3.Distance(SpawnPos.position, Point1Obj.transform.position) > 15)
+            {
+                playerScript.RuneCoolDown(thisSpell, true);
+                DestroyPoints();
+                thisSpell.RemoveSpellPoints(this);
             }
         }
     }
@@ -405,10 +480,10 @@ public class SpellPoints
                 }
     }
 
-    public void DestroyPoints(bool DestroyMain)
+    public void DestroyPoints()
     {
-        if (DestroyMain) GameObject.Destroy(mainPoint);
-        if (point1Obj) GameObject.Destroy(point1Obj);
+        if (MainPoint) GameObject.Destroy(MainPoint);
+        if (Point1Obj) GameObject.Destroy(Point1Obj);
         if (poin2Obj) GameObject.Destroy(poin2Obj);
         if (lineObj) GameObject.Destroy(lineObj);
     }

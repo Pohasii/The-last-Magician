@@ -10,14 +10,13 @@ public class Spell
     string SpellDescription;
     float SpellLifeTime;
     List<Element> ComponentsOfSpell;
+    Material UImaterial;
 
-    Vector3 StartPos;
-    Material material;
-
+    public static float castTimer;
+    public static bool isCast;
     protected float SpellCastTime;
 
     public List<SpellPoints> sp = new List<SpellPoints>();
-    public enum SpellBehaviourType { Single, Other }
     public GameObject PointObj;//префаб точки
     public static bool keyClick;
     public static PlayerScript playerScript;
@@ -37,15 +36,11 @@ public class Spell
         get { return SpellLifeTime; }
         set { SpellLifeTime = value; }
     }
-    public Vector3 StartPos1
-    {
-        get { return StartPos; }
-        set { StartPos = value; }
-    }
+
     public Material Material1
     {
-        get { return material; }
-        set { material = value; }
+        get { return UImaterial; }
+        set { UImaterial = value; }
     }
     public List<Element> ComponentsOfSpell1
     {
@@ -63,8 +58,8 @@ public class Spell
         ComponentsOfSpell = Components;
         SpellCastTime = CastTime;
         SpellLifeTime = p_LifeTime;
-
-        material = Resources.Load<Material>("SpellMaterial/" + p_Name);
+        UImaterial = Resources.Load<Material>("SpellMaterial/" + p_Name);
+        isCast = false;
     }
 
 
@@ -96,20 +91,16 @@ public class Spell
 
     public virtual void SpellCastBase(Transform SpawnPos, Transform cameraTransform)
     {
-        if (!playerScript.CheckRuneCD(this))
-        {
-            CharacterUIController.SetTextTrigger("Not enough runes");
-        }
     }
 
-    public void SpellCastInvoke(Transform SpawnPos, Transform cameraTransform)
+    public virtual void SpellCastInvoke(Transform SpawnPos, Transform cameraTransform)
     {
-        if (keyClick)
+        if (CastTimer(ref castTimer, ref isCast))
         {
             SpellCastBase(SpawnPos, cameraTransform);
+            StopCast();
         }
     }
-
 
     public void RemoveSpellPointsBase()
     {
@@ -134,6 +125,29 @@ public class Spell
     {
         playerScript.RuneCoolDown(this, true);
         RemoveSpellPointsBase();
+    }
+
+    bool CastTimer(ref float p_CastTimer, ref bool p_isCast)
+    {
+        if (SpellCastTime > 0)
+            playerScript.CastBar.gameObject.SetActive(isCast);
+        if (p_isCast)
+        {
+            if (SpellCastTime == 0)
+                return true;
+            p_CastTimer += Time.deltaTime;
+            playerScript.CastBar.maxValue = SpellCastTime;
+            playerScript.CastBar.value = p_CastTimer;
+
+            if (p_CastTimer >= SpellCastTime)
+                return true;
+        }
+        return false;
+    }
+    public void StopCast()
+    {
+        isCast = false;
+        castTimer = 0;
     }
 }
 
@@ -177,18 +191,19 @@ public class SWNP : DamageSpell
 
     public override void SpellCast(Transform SpawnPos, Transform cameraTransform)
     {
+        if (keyClick)
+            if (playerScript.CheckRuneCD(this))
+                isCast = true;
+            else
+                CharacterUIController.SetTextTrigger("Not enough runes");
         base.SpellCastInvoke(SpawnPos, cameraTransform);
     }
 
     public override void SpellCastBase(Transform SpawnPos, Transform cameraTransform)
     {
-        base.SpellCastBase(SpawnPos, cameraTransform);
-        if (playerScript.CheckRuneCD(this))
-        {
-            GameObject ob = (GameObject)GameObject.Instantiate(SpellObj1, SpawnPos.position, cameraTransform.rotation);
-            ob.SendMessage("SpellSetap", this);
-            playerScript.RuneCoolDown(this);
-        }
+        GameObject ob = (GameObject)GameObject.Instantiate(SpellObj1, SpawnPos.position, cameraTransform.rotation);
+        ob.SendMessage("SpellSetap", this);
+        playerScript.RuneCoolDown(this);
     }
 }
 
@@ -211,23 +226,27 @@ public class SWOP : DamageSpell
     {
         Radius = p_Radius;
     }
-
+    bool SpellPointInRange;
     public override void SpellCast(Transform SpawnPos, Transform cameraTransform)
     {
         base.SpellCast(SpawnPos, cameraTransform);
         for (int i = 0; i < sp.Count; i++)
-            sp[i].SetapPoint(SpawnPos, cameraTransform, this);//вызов у последнего экземпляра класса SpellPoints функции уставки точек
+           SpellPointInRange = sp[i].SetapPoint(SpawnPos, cameraTransform, this);//вызов у последнего экземпляра класса SpellPoint функции уставки точек(возвращает True, если возможно поставить точку, т.е. дистнция от игрока до точки меньше 10)
+    }
+
+    public override void SpellCastInvoke(Transform SpawnPos, Transform cameraTransform)
+    {
+        if (keyClick && sp.Count > 0 && sp[sp.Count - 1].PointsSetup && SpellPointInRange)
+            isCast = true;
+        base.SpellCastInvoke(SpawnPos, cameraTransform);
     }
 
     public override void SpellCastBase(Transform SpawnPos, Transform cameraTransform)
     {
-        if (sp.Count > 0 && sp[sp.Count - 1].PointsSetup)
-        {
-            GameObject ob = (GameObject)GameObject.Instantiate(SpellObj1, sp[sp.Count - 1].MainPoint.transform.position - Vector3.up, Quaternion.identity);
-            ob.SendMessage("SpellSetap", this);
-            playerScript.RuneCoolDown(this);
-            RemoveSpellPoints(sp[sp.Count - 1]);
-        }
+        GameObject ob = (GameObject)GameObject.Instantiate(SpellObj1, sp[sp.Count - 1].MainPoint.transform.position - Vector3.up, Quaternion.identity);
+        ob.SendMessage("SpellSetap", this);
+        playerScript.RuneCoolDown(this);
+        RemoveSpellPoints(sp[sp.Count - 1]);
     }
 }
 
@@ -246,15 +265,19 @@ public class SWTP : DamageSpell
             sp[i].SetapPoints(SpawnPos, cameraTransform, this);//вызов у последнего экземпляра класса SpellPoints функции уставки точек
     }
 
+    public override void SpellCastInvoke(Transform SpawnPos, Transform cameraTransform)
+    {
+        if (keyClick && sp[sp.Count - 1].PointsReady)
+            isCast = true;
+        base.SpellCastInvoke(SpawnPos, cameraTransform);
+    }
+
     public override void SpellCastBase(Transform SpawnPos, Transform cameraTransform)
     {
-            if (sp[sp.Count - 1].PointsReady)
-            {
-                GameObject ob = (GameObject)GameObject.Instantiate(SpellObj1, sp[sp.Count - 1].Point1Obj.transform.position, sp[sp.Count - 1].Point1Obj.transform.rotation);
-                ob.SendMessage("SpellSetap", this);
-                sp[sp.Count - 1].DestroyPoints();
-                RemoveSpellPoints();
-            }
+        GameObject ob = (GameObject)GameObject.Instantiate(SpellObj1, sp[sp.Count - 1].Point1Obj.transform.position, sp[sp.Count - 1].Point1Obj.transform.rotation);
+        ob.SendMessage("SpellSetap", this);
+        sp[sp.Count - 1].DestroyPoints();
+        RemoveSpellPoints();
     }
 }
 
@@ -273,6 +296,11 @@ public class MovementSpell : Spell
 
     public override void SpellCast(Transform SpawnPos, Transform cameraTransform)
     {
+        if (keyClick)
+            if (playerScript.CheckRuneCD(this))
+                isCast = true;
+            else
+                CharacterUIController.SetTextTrigger("Not enough runes");
         base.SpellCastInvoke(SpawnPos, cameraTransform);
     }
 
@@ -309,7 +337,6 @@ public class MovementSpell : Spell
             }
         }
     }
-
 }
 
 [System.Serializable]
@@ -370,7 +397,7 @@ public class SpellPoints
         MainPoint.transform.position = pointsPos;
     }
 
-    public void SetapPoint(Transform SpawnPos, Transform cameraTransform, Spell thisSpell)
+    public bool SetapPoint(Transform SpawnPos, Transform cameraTransform, Spell thisSpell)
     {
         if (!PointsSetup && !PointsReady)
         {
@@ -390,7 +417,10 @@ public class SpellPoints
             mainLine.SetPosition(0, pointsPos);
             mainLine.SetPosition(1, SpawnPos.position);
             ColorByDistance(pointsPos, SpawnPos.position, ref mainLine);
+            if (Vector3.Distance(MainPoint.transform.position, cameraTransform.position) > 10)
+                return false;
         }
+        return true;
     }
 
     public void SetapPoints(Transform SpawnPos, Transform cameraTransform, Spell thisSpell)

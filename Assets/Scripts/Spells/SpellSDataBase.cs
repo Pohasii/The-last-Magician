@@ -79,7 +79,7 @@ public class SpellSDataBase : MonoBehaviour
 
         Spells.Add(new SWNP("FireBall", "p_Damage", pointObj, FireBallElements, 25f, 2f, 2f, DamageSpell.SpellDamageTypes.Fire));
         Spells.Add(new DamageSpell("FrostBolt", "Slow", pointObj, FrostBoltElements, 1f, 1f, 2f, DamageSpell.SpellDamageTypes.Frost));
-        Spells.Add(new SWOP("Fire area", "Pian", pointObj, FireAreaElements, 10f * Time.deltaTime, 2f, 20f, DamageSpell.SpellDamageTypes.Fire));
+        Spells.Add(new SWOP("Fire area", "Pian", pointObj, FireAreaElements, 10f * Time.deltaTime, 1f, 20f, DamageSpell.SpellDamageTypes.Fire));
         Spells.Add(new SWOP("Bomb", "BOOM", pointObj, BombElements, 5, 35, 2, 10, DamageSpell.SpellDamageTypes.Fire));
         Spells.Add(new MovementSpell("Blink", "Blink111", BlinkElements, 0f, 0, 15f));
     }

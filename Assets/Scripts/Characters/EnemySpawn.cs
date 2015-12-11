@@ -8,9 +8,6 @@ public class EnemySpawn : MonoBehaviour
 
     public GameObject EnemyBoss, EnemyCreep;
 
-    public float SpawnDelay;
-    float timer;
-
     void Start()
     {
         myTransform = GetComponent<Transform>();

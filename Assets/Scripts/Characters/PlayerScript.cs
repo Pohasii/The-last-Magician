@@ -17,6 +17,7 @@ public class PlayerScript : MonoBehaviour
     public Transform SpellSpawnPos;
 
     public Slider HpSlider;
+    public Slider CastBar;
     public Image DamageImage;
 
     Text ScoreRune;
@@ -28,6 +29,9 @@ public class PlayerScript : MonoBehaviour
 
     int NumOfActiveSpell;
 
+    public delegate void MovePlayer();
+    public static event MovePlayer OnPlayerMove;
+
     void Awake()
     {
         Spell.playerScript = GetComponent<PlayerScript>();
@@ -37,8 +41,10 @@ public class PlayerScript : MonoBehaviour
         Spells = GameController.PlayerSpells;
         ScoreRune = GameObject.Find("RuneScore").GetComponent<Text>();
         //Spells = SpellSDataBase.Spells;
+
         Player.damageImage = DamageImage;
         Player.playerHPSlider = HpSlider;
+        
         player = new Player(myTransform, myRigidBody, Spells, HP, MoveSpeed, HPRegen);
 
         float x = 10;
@@ -177,12 +183,16 @@ public class PlayerScript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.G))
         {
+            if (OnPlayerMove != null)
+                OnPlayerMove();
             if (Spells[NumOfActiveSpell].sp.Count > 0)
                 Spells[NumOfActiveSpell].RemoveSpellPoints();
             NumOfActiveSpell--;
         }
         if (Input.GetKeyDown(KeyCode.H))
         {
+            if (OnPlayerMove != null)
+                OnPlayerMove();
             if (Spells[NumOfActiveSpell].sp.Count > 0)
                 Spells[NumOfActiveSpell].RemoveSpellPoints();
             NumOfActiveSpell++;
@@ -193,7 +203,20 @@ public class PlayerScript : MonoBehaviour
     {
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
-
+        if (h != 0 || v != 0)
+        {
+            if (OnPlayerMove != null)
+                OnPlayerMove();
+        }
         player.Move(h, v);
+    }
+
+    void OnEnable()
+    {
+        OnPlayerMove += Spells[NumOfActiveSpell].StopCast;
+    }
+    void OnDisable()
+    {
+        OnPlayerMove -= Spells[NumOfActiveSpell].StopCast;
     }
 }

@@ -44,7 +44,7 @@ public class PlayerScript : MonoBehaviour
 
         Player.damageImage = DamageImage;
         Player.playerHPSlider = HpSlider;
-        
+
         player = new Player(myTransform, myRigidBody, Spells, HP, MoveSpeed, HPRegen);
 
         float x = 10;
@@ -154,20 +154,35 @@ public class PlayerScript : MonoBehaviour
 
     void SpellCast()
     {
+        if (Spells.Count > 0)
+        {
+            Spell.keyClick = Input.GetKeyDown(KeyCode.R);
+            Transform Parametr = null;
+
+            if (Spells[NumOfActiveSpell].SpellName1 == "Blink")
+                Parametr = myTransform;
+            else
+                Parametr = SpellSpawnPos;
+
+            Spells[NumOfActiveSpell].SpellCast(Parametr, cameraTransform);
+        }
+        //////////ДЛЯ ТЕСТИРОВАНИЯ
         Spell.keyClick = Input.GetKeyDown(KeyCode.R);
-        Transform Parametr = null;
+        Transform Parametr1 = null;
 
-        if (Spells[NumOfActiveSpell].SpellName1 == "Blink")
-            Parametr = myTransform;
+        if (SpellSDataBase.Spells[NumOfActiveSpell].SpellName1 == "Blink")
+            Parametr1 = myTransform;
         else
-            Parametr = SpellSpawnPos;
+            Parametr1 = SpellSpawnPos;
 
-        Spells[NumOfActiveSpell].SpellCast(Parametr, cameraTransform);
+        SpellSDataBase.Spells[NumOfActiveSpell].SpellCast(Parametr1, SpellSpawnPos);
+        ///////////////////////
     }
 
     void Update()
     {
-        SpellChange();
+        //SpellChange(Spells);
+        SpellChange(SpellSDataBase.Spells);///Для тестирования
 
         SpellCast();
 
@@ -179,22 +194,22 @@ public class PlayerScript : MonoBehaviour
         enabled = !player.isDead;
     }
 
-    void SpellChange()
+    void SpellChange(List<Spell> p_spell)
     {
-        if (Input.GetKeyDown(KeyCode.G))
+        if (NumOfActiveSpell > 0 && Input.GetKeyDown(KeyCode.Q))
         {
             if (OnPlayerMove != null)
                 OnPlayerMove();
-            if (Spells[NumOfActiveSpell].sp.Count > 0)
-                Spells[NumOfActiveSpell].RemoveSpellPoints();
+            if (p_spell[NumOfActiveSpell].sp.Count > 0)
+                p_spell[NumOfActiveSpell].RemoveSpellPoints();
             NumOfActiveSpell--;
         }
-        if (Input.GetKeyDown(KeyCode.H))
+        if (NumOfActiveSpell < p_spell.Count - 1 && Input.GetKeyDown(KeyCode.E))
         {
             if (OnPlayerMove != null)
                 OnPlayerMove();
-            if (Spells[NumOfActiveSpell].sp.Count > 0)
-                Spells[NumOfActiveSpell].RemoveSpellPoints();
+            if (p_spell[NumOfActiveSpell].sp.Count > 0)
+                p_spell[NumOfActiveSpell].RemoveSpellPoints();
             NumOfActiveSpell++;
         }
     }
@@ -213,10 +228,14 @@ public class PlayerScript : MonoBehaviour
 
     void OnEnable()
     {
-        OnPlayerMove += Spells[NumOfActiveSpell].StopCast;
+        OnPlayerMove += SpellSDataBase.Spells[NumOfActiveSpell].StopCast;///Для тестирования
+        if (Spells.Count > 0)
+            OnPlayerMove += Spells[NumOfActiveSpell].StopCast;
     }
     void OnDisable()
     {
-        OnPlayerMove -= Spells[NumOfActiveSpell].StopCast;
+        OnPlayerMove -= SpellSDataBase.Spells[NumOfActiveSpell].StopCast;///Для тестирования
+        if (Spells.Count > 0)
+            OnPlayerMove -= Spells[NumOfActiveSpell].StopCast;
     }
 }

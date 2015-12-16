@@ -43,7 +43,7 @@ public class Player : Character
         hpSlider.maxValue = MaxHP;
         hpSlider.value = MaxHP;
 
-        cameraTransform = Camera.main.transform;
+        cameraTransform = mytransform.GetChild(0);//Camera.main.transform;
     }
 
     public void Move(float h, float v)

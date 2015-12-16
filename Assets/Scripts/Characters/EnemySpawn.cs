@@ -8,11 +8,20 @@ public class EnemySpawn : MonoBehaviour
 
     public GameObject EnemyBoss, EnemyCreep;
 
+    void OnEnable()
+    {
+        GameController.NextWave += NewCreepWave;
+    }
+    void OnDisable()
+    {
+        GameController.NextWave += NewCreepWave;
+    }
+
     void Start()
     {
         myTransform = GetComponent<Transform>();
         GameController.EnemySpawnPoints.Add(gameObject);
-        InvokeRepeating("SpawnCreeps", 0, 5);
+        NewCreepWave();
     }
 
     void Update()
@@ -21,6 +30,11 @@ public class EnemySpawn : MonoBehaviour
         {
             CancelInvoke("SpawnCreeps");
         }
+    }
+
+    public void NewCreepWave()
+    {
+        InvokeRepeating("SpawnCreeps", 0, 5);
     }
 
     public void SpawnCreeps()

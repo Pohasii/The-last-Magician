@@ -17,13 +17,14 @@ public class EnemyScript : MonoBehaviour
     public GameObject ScoreRune;
 
     public Enemy enemy;
+    public Animator anim;
 
     void Start()
     {
         Enemy.ScoreRune = ScoreRune;
         myTransform = GetComponent<Transform>();
         Nav = GetComponent<NavMeshAgent>();
-        enemy = new Enemy(Nav, canvas, Damage, AttacDelay, HP, MP, HPRegen, MPRegen);
+        enemy = new Enemy(anim, Nav, canvas, Damage, AttacDelay, HP, MP, HPRegen, MPRegen);
     }
 
     void Update()
@@ -31,12 +32,16 @@ public class EnemyScript : MonoBehaviour
         enemy.Move(myTransform);
         enemy.AttacTrigger();
 
-        RespNewEnemy();
+        if (enemy.CurHP <= 0)
+        {
+            GameController.RespNewEnemy(name);
+            Destroy(gameObject);
+        }
     }
 
     void RespNewEnemy()
     {
-        if (enemy.IsDead1)
+        if (enemy.CurHP <= 0)
         {
             if (name == "Creep")
             {
@@ -68,6 +73,7 @@ public class EnemyScript : MonoBehaviour
     {
         if (col.tag == "Player")
         {
+            anim.SetBool("Attac", true);
             enemy.PlayerInRange = true;
         }
     }
@@ -76,6 +82,7 @@ public class EnemyScript : MonoBehaviour
     {
         if (col.tag == "Player")
         {
+            anim.SetBool("Attac", false);
             enemy.PlayerInRange = false;
         }
     }

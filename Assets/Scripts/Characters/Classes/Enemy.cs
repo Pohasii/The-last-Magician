@@ -20,18 +20,14 @@ public class Enemy : Character
 
     float timer;
     float EnemyAttacDelay;
-    bool isDead = false;
-    public bool IsDead1
-    {
-        get { return isDead; }
-        set { isDead = value; }
-    }
 
     PlayerScript playerScripts;
-    
+
+    Animator anim;
+
     public static GameObject ScoreRune;
 
-    public Enemy(NavMeshAgent nav, Canvas p_Canvas,float p_Damage, float p_AttacDelay,float p_HP, float p_MP, float p_HPRegen, float p_MPRegen)
+    public Enemy(Animator p_anim, NavMeshAgent nav, Canvas p_Canvas, float p_Damage, float p_AttacDelay, float p_HP, float p_MP, float p_HPRegen, float p_MPRegen)
         : base(p_Damage, p_HP, p_HPRegen, 5)
     {
         EnemyAttacDelay = p_AttacDelay;
@@ -46,19 +42,20 @@ public class Enemy : Character
         Target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         playerScripts = Target.GetComponent<PlayerScript>();
         EnemyNav = nav;
+        anim = p_anim;
     }
 
     public void Move(Transform myTransform)
     {
-        if(!playerScripts.player.isDead)
-        EnemyNav.SetDestination(Target.position);
+        if (!playerScripts.player.isDead)
+            EnemyNav.SetDestination(Target.position);
         else
-        EnemyNav.Stop();
-        
+            EnemyNav.Stop();
+
         if (CurHP <= 0)
         {
             GameObject.Instantiate(ScoreRune, myTransform.position, Quaternion.identity);
-            isDead = true;
+            anim.SetTrigger("Dead");
         }
     }
 
@@ -74,7 +71,6 @@ public class Enemy : Character
     public void Attac()
     {
         timer = 0f;
-
         if (!playerScripts.player.isDead)
         {
             playerScripts.player.TakeDamageBase(Damage);

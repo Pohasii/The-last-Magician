@@ -65,7 +65,7 @@ public class Spell
 
     public virtual void SpellCast(Transform SpawnPos, Transform cameraTransform)
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             if (playerScript.CheckRuneCD(this))
             {
@@ -129,10 +129,9 @@ public class Spell
 
     bool CastTimer(ref float p_CastTimer, ref bool p_isCast)
     {
-        if (SpellCastTime > 0)
-            playerScript.CastBar.gameObject.SetActive(isCast);
         if (p_isCast)
         {
+            playerScript.CastBar.gameObject.SetActive(true);
             if (SpellCastTime == 0)
                 return true;
             p_CastTimer += Time.deltaTime;
@@ -146,6 +145,7 @@ public class Spell
     }
     public void StopCast()
     {
+        playerScript.CastBar.gameObject.SetActive(false);
         isCast = false;
         castTimer = 0;
     }
@@ -231,7 +231,7 @@ public class SWOP : DamageSpell
     {
         base.SpellCast(SpawnPos, cameraTransform);
         for (int i = 0; i < sp.Count; i++)
-           SpellPointInRange = sp[i].SetapPoint(SpawnPos, cameraTransform, this);//вызов у последнего экземпляра класса SpellPoint функции уставки точек(возвращает True, если возможно поставить точку, т.е. дистнция от игрока до точки меньше 10)
+            SpellPointInRange = sp[i].SetapPoint(SpawnPos, cameraTransform, this);//вызов у последнего экземпляра класса SpellPoint функции уставки точек(возвращает True, если возможно поставить точку, т.е. дистнция от игрока до точки меньше 10)
     }
 
     public override void SpellCastInvoke(Transform SpawnPos, Transform cameraTransform)
@@ -313,13 +313,15 @@ public class MovementSpell : Spell
             Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, SpellTeleportDistance, FloorMask))
+            if (Physics.Raycast(ray, out hit, SpellTeleportDistance, FloorMask) && !Physics.Raycast(ray, out hit, SpellTeleportDistance, BarrierMask))
             {
                 myTransform.position = new Vector3(hit.point.x, myTransform.position.y, hit.point.z);
             }
             else
             {
-                Collider[] coll = Physics.OverlapSphere(new Vector3(cameraTransform.position.x, cameraTransform.position.y, cameraTransform.position.z + SpellTeleportDistance), 2, BarrierMask);
+                Vector3 spherePos;
+                spherePos = cameraTransform.position + cameraTransform.forward * SpellTeleportDistance;
+                Collider[] coll = Physics.OverlapSphere(spherePos, 2, BarrierMask);
                 if (coll.Length == 0)
                 {
                     if (!Physics.Raycast(ray, out hit, Mathf.Infinity, FloorMask))
@@ -407,7 +409,7 @@ public class SpellPoints
         if (PointsSetup)
         {
             ray = new Ray(SpawnPos.position, cameraTransform.forward);
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Floor")))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Barrier")) || Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Floor")))
             {
                 MainPointSpawn(SpawnPos, cameraTransform, thisSpell);
             }
@@ -417,7 +419,7 @@ public class SpellPoints
             mainLine.SetPosition(0, pointsPos);
             mainLine.SetPosition(1, SpawnPos.position);
             ColorByDistance(pointsPos, SpawnPos.position, ref mainLine);
-            if (Vector3.Distance(MainPoint.transform.position, cameraTransform.position) > 10)
+            if (Vector3.Distance(MainPoint.transform.position, SpawnPos.position) > 10)
                 return false;
         }
         return true;
@@ -433,10 +435,10 @@ public class SpellPoints
         if (PointsSetup)
         {
             ray = new Ray(SpawnPos.position, cameraTransform.forward);
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Floor")))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Barrier")) || Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Floor")))
             {
                 MainPointSpawn(SpawnPos, cameraTransform, thisSpell);
-                if (Input.GetKeyDown(KeyCode.E) && Vector3.Distance(pointsPos, SpawnPos.position) < 10)
+                if (Input.GetKeyDown(KeyCode.Mouse0) && Vector3.Distance(pointsPos, SpawnPos.position) < 10)
                 {
                     if (!Point1Obj)//спавн первой точки
                     {

@@ -11,6 +11,7 @@ public class Spell
     float SpellLifeTime;
     List<Element> ComponentsOfSpell;
     Material UImaterial;
+    Sprite SpellImage;
 
     public static float castTimer;
     public static bool isCast;
@@ -42,10 +43,29 @@ public class Spell
         get { return UImaterial; }
         set { UImaterial = value; }
     }
+    public Sprite SpellImage1
+    {
+        get { return SpellImage; }
+        set { SpellImage = value; }
+    }
     public List<Element> ComponentsOfSpell1
     {
         get { return ComponentsOfSpell; }
         set { ComponentsOfSpell = value; }
+    }
+
+    float radius;
+    public float Radius
+    {
+        get { return radius; }
+        set { radius = value; }
+    }
+
+    float ExplosionForce;
+    public float ExplosionForce1
+    {
+        get { return ExplosionForce; }
+        set { ExplosionForce = value; }
     }
 
     public Spell()
@@ -59,11 +79,15 @@ public class Spell
         SpellCastTime = CastTime;
         SpellLifeTime = p_LifeTime;
         UImaterial = Resources.Load<Material>("SpellMaterial/" + p_Name);
+        SpellImage = Resources.Load<Sprite>("SpellImage/" + p_Name);
         isCast = false;
     }
 
-
     public virtual void SpellCast(Transform SpawnPos, Transform cameraTransform)
+    {
+    }
+
+    public void CastSpellWithPoint(Transform SpawnPos, Transform cameraTransform)
     {
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
@@ -83,7 +107,7 @@ public class Spell
             }
             else
             {
-                CharacterUIController.SetTextTrigger("Not enough runes");
+                CharacterUIController.SetTextTrigger("Not enough runes", Color.red);
             }
         }
         SpellCastInvoke(SpawnPos, cameraTransform);
@@ -129,6 +153,7 @@ public class Spell
 
     bool CastTimer(ref float p_CastTimer, ref bool p_isCast)
     {
+        PlayerScript.OnPlayerMove += StopCast;
         if (p_isCast)
         {
             playerScript.CastBar.gameObject.SetActive(true);
@@ -148,11 +173,12 @@ public class Spell
         playerScript.CastBar.gameObject.SetActive(false);
         isCast = false;
         castTimer = 0;
+        PlayerScript.OnPlayerMove -= StopCast;
     }
 }
 
 [System.Serializable]
-public class DamageSpell : Spell
+public class HZSpell : Spell
 {
     float SpellDamage;
     public float SpellDamage1
@@ -171,7 +197,7 @@ public class DamageSpell : Spell
         set { SpellObj = value; }
     }
 
-    public DamageSpell(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
+    public HZSpell(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
         : base(p_Name, p_Description, Components, CastTime, p_LifeTime)
     {
         PointObj = pointObj;
@@ -180,13 +206,34 @@ public class DamageSpell : Spell
 
         SpellObj = Resources.Load<GameObject>("SpellsPrefab/" + p_Name);
     }
+
+    public HZSpell(string p_Name, string p_Description, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
+        : base(p_Name, p_Description, Components, CastTime, p_LifeTime)
+    {
+        SpellDamage = Damage;
+        SpellDamageType = DamageType;
+
+        SpellObj = Resources.Load<GameObject>("SpellsPrefab/" + p_Name);
+    }
+
+    public HZSpell(string p_Name, string p_Description, List<Element> Components, float CastTime, float p_LifeTime)
+        : base(p_Name, p_Description, Components, CastTime, p_LifeTime)
+    {
+        SpellObj = Resources.Load<GameObject>("SpellsPrefab/" + p_Name);
+    }
 }
 
-public class SWNP : DamageSpell
+public class SWNP : HZSpell
 {
-    public SWNP(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
-        : base(p_Name, p_Description, pointObj, Components, Damage, CastTime, p_LifeTime, DamageType)
+    public SWNP(string p_Name, string p_Description, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
+        : base(p_Name, p_Description, Components, Damage, CastTime, p_LifeTime, DamageType)
     {
+    }
+    public SWNP(string p_Name, string p_Description, List<Element> Components, float p_CastTime, float p_Radius, float p_ExpForce, float p_LifeTime)
+        : base(p_Name, p_Description, Components, p_CastTime, p_LifeTime)
+    {
+        ExplosionForce1 = p_ExpForce;
+        Radius = p_Radius;
     }
 
     public override void SpellCast(Transform SpawnPos, Transform cameraTransform)
@@ -195,7 +242,7 @@ public class SWNP : DamageSpell
             if (playerScript.CheckRuneCD(this))
                 isCast = true;
             else
-                CharacterUIController.SetTextTrigger("Not enough runes");
+                CharacterUIController.SetTextTrigger("Not enough runes", Color.red);
         base.SpellCastInvoke(SpawnPos, cameraTransform);
     }
 
@@ -207,29 +254,23 @@ public class SWNP : DamageSpell
     }
 }
 
-public class SWOP : DamageSpell
+public class SWOP : HZSpell
 {
-    float radius;
-    public float Radius
-    {
-        get { return radius; }
-        set { radius = value; }
-    }
-
     public SWOP(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
         : base(p_Name, p_Description, pointObj, Components, Damage, CastTime, p_LifeTime, DamageType)
     {
     }
 
-    public SWOP(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float p_Radius, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
+    public SWOP(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float p_Radius, float p_ExpForce, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
         : this(p_Name, p_Description, pointObj, Components, Damage, CastTime, p_LifeTime, DamageType)
     {
+        ExplosionForce1 = p_ExpForce;
         Radius = p_Radius;
     }
     bool SpellPointInRange;
     public override void SpellCast(Transform SpawnPos, Transform cameraTransform)
     {
-        base.SpellCast(SpawnPos, cameraTransform);
+        base.CastSpellWithPoint(SpawnPos, cameraTransform);
         for (int i = 0; i < sp.Count; i++)
             SpellPointInRange = sp[i].SetapPoint(SpawnPos, cameraTransform, this);//вызов у последнего экземпляра класса SpellPoint функции уставки точек(возвращает True, если возможно поставить точку, т.е. дистнция от игрока до точки меньше 10)
     }
@@ -250,7 +291,7 @@ public class SWOP : DamageSpell
     }
 }
 
-public class SWTP : DamageSpell
+public class SWTP : HZSpell
 {
     public SWTP(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
         : base(p_Name, p_Description, pointObj, Components, Damage, CastTime, p_LifeTime, DamageType)
@@ -260,7 +301,7 @@ public class SWTP : DamageSpell
 
     public override void SpellCast(Transform SpawnPos, Transform cameraTransform)
     {
-        base.SpellCast(SpawnPos, cameraTransform);
+        base.CastSpellWithPoint(SpawnPos, cameraTransform);
         for (int i = 0; i < sp.Count; i++)
             sp[i].SetapPoints(SpawnPos, cameraTransform, this);//вызов у последнего экземпляра класса SpellPoints функции уставки точек
     }
@@ -293,14 +334,31 @@ public class MovementSpell : Spell
     {
         SpellTeleportDistance = TeleportDistance;
     }
-
+    //GameObject lObj;
+    //LineRenderer Lline;Для визуализации дальности блинка
+    //GameObject ob;
     public override void SpellCast(Transform SpawnPos, Transform cameraTransform)
     {
+     /*   if (!lObj)                                                                    Для визуализации дальности блинка
+        {
+            lObj = new GameObject();
+            Lline = lObj.AddComponent<LineRenderer>();
+            Lline.SetWidth(0.4f, 0.4f);
+            ob = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            ob.transform.localScale = Vector3.one * 2;
+        }
+        else
+        {
+            ob.transform.position = cameraTransform.position + cameraTransform.forward * SpellTeleportDistance;
+            Lline.SetPosition(0, cameraTransform.position);
+            Lline.SetPosition(1, cameraTransform.position + cameraTransform.forward * SpellTeleportDistance);
+        }*/
+
         if (keyClick)
             if (playerScript.CheckRuneCD(this))
                 isCast = true;
             else
-                CharacterUIController.SetTextTrigger("Not enough runes");
+                CharacterUIController.SetTextTrigger("Not enough runes", Color.red);
         base.SpellCastInvoke(SpawnPos, cameraTransform);
     }
 
@@ -320,7 +378,7 @@ public class MovementSpell : Spell
             else
             {
                 Vector3 spherePos;
-                spherePos = cameraTransform.position + cameraTransform.forward * SpellTeleportDistance;
+                spherePos = cameraTransform.position + cameraTransform.forward * (SpellTeleportDistance - 2);
                 Collider[] coll = Physics.OverlapSphere(spherePos, 2, BarrierMask);
                 if (coll.Length == 0)
                 {

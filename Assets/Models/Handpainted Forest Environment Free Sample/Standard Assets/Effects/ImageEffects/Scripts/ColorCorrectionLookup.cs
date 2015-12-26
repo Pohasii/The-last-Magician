@@ -104,7 +104,7 @@ namespace UnityStandardAssets.ImageEffects
             }
             else {
                 // error, something went terribly wrong
-                Debug.LogError ("Couldn't color correct with 3D LUT texture. Image Effect will be disabled.");
+                Debug.LogError ("Couldn't Sprite correct with 3D LUT texture. Image Effect will be disabled.");
             }
         }
 

@@ -24,7 +24,7 @@ public class SingleSpellBehaviour : MonoBehaviour
     {
         if (col.tag == "Enemy" && !col.isTrigger)
         {
-            col.GetComponent<EnemyScript>().enemy.TakeDamage((DamageSpell)spell);
+            col.GetComponent<EnemyScript>().enemy.TakeDamage((HZSpell)spell);
             myTransform.GetComponent<AudioSource>().Play();
         }
     }

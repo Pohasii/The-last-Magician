@@ -5,26 +5,21 @@ using System.Collections.Generic;
 
 public class PlayerScript : MonoBehaviour
 {
-    Transform myTransform;
-    Transform cameraTransform;
-    Rigidbody myRigidBody;
+    public static PlayerScript playerScript;
 
-    public float HP;
-    public float MoveSpeed;
-    public float HPRegen;
+    public static Transform myTransform;
+    public static Rigidbody myRigidBody;
+    public Transform cameraTransform;
 
-    public List<Spell> Spells;
+    public List<Spell> Spells = new List<Spell>();
     public Transform SpellSpawnPos;
 
     public Slider HpSlider;
     public Slider CastBar;
     public Image DamageImage;
 
-    Text ScoreRune;
-
     public Player player;
 
-    public GameObject RRuneObj;
     public List<GameObject> RRune = new List<GameObject>();
 
     int NumOfActiveSpell;
@@ -34,48 +29,20 @@ public class PlayerScript : MonoBehaviour
 
     void Awake()
     {
+        playerScript = this;
         Spell.playerScript = GetComponent<PlayerScript>();
+
         myTransform = GetComponent<Transform>();
-        cameraTransform = Camera.main.transform;
         myRigidBody = GetComponent<Rigidbody>();
+        cameraTransform = Camera.main.transform;
+
         Spells = GameController.PlayerSpells;
-        ScoreRune = GameObject.Find("RuneScore").GetComponent<Text>();
         //Spells = SpellSDataBase.Spells;
 
         Player.damageImage = DamageImage;
         Player.playerHPSlider = HpSlider;
 
-        player = new Player(myTransform, myRigidBody, Spells, HP, MoveSpeed, HPRegen);
-
-        float x = 10;
-        float y = -40;
-
-        for (int i = 0; i < 3; i++)
-        {
-            GameObject fireRune = Instantiate(RRuneObj);
-            GameObject frostRune = Instantiate(RRuneObj);
-            GameObject ArcaneRune = Instantiate(RRuneObj);
-
-            fireRune.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").GetComponent<RectTransform>());
-            frostRune.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").GetComponent<RectTransform>());
-            ArcaneRune.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").GetComponent<RectTransform>());
-
-            fireRune.GetComponent<RectTransform>().anchoredPosition = new Vector2(x += 15, y);
-            frostRune.GetComponent<RectTransform>().anchoredPosition = new Vector2(x + 47.5f, y);
-            ArcaneRune.GetComponent<RectTransform>().anchoredPosition = new Vector2(x + 94.5f, y);
-
-            fireRune.GetComponent<RectTransform>().localScale = Vector3.one;
-            frostRune.GetComponent<RectTransform>().localScale = Vector3.one;
-            ArcaneRune.GetComponent<RectTransform>().localScale = Vector3.one;
-
-            fireRune.GetComponent<ScriptResourceRune>().element = SpellSDataBase.FireElement;
-            frostRune.GetComponent<ScriptResourceRune>().element = SpellSDataBase.FrostElement;
-            ArcaneRune.GetComponent<ScriptResourceRune>().element = SpellSDataBase.ArcaneElement;
-
-            RRune.Add(fireRune);
-            RRune.Add(frostRune);
-            RRune.Add(ArcaneRune);
-        }
+        player = new Player(Spells, CharactersDB.characterDB.HP, CharactersDB.characterDB.HPRegen, CharactersDB.characterDB.MoveSpeed);
     }
 
     public bool CheckRuneCD(Spell spell)
@@ -112,13 +79,13 @@ public class PlayerScript : MonoBehaviour
         return isSuitable;
     }
 
-    public void RuneCoolDown(Spell spell, bool hzCD)
+    public void RuneCoolDown(Spell spell, bool CDStart)
     {
         for (int i = 0; i < spell.ComponentsOfSpell1.Count; i++)
         {
             for (int k = 0; k < RRune.Count; k++)
             {
-                if (!hzCD)
+                if (!CDStart)
                 {
                     if (spell.ComponentsOfSpell1[i] == RRune[k].GetComponent<ScriptResourceRune>().element && RRune[k].GetComponent<ScriptResourceRune>().CurCoolDown <= 0)
                     {
@@ -154,7 +121,7 @@ public class PlayerScript : MonoBehaviour
 
     void SpellCast()
     {
-        if (Spells.Count > 0)
+        if (Spells.Count > 0 && Spells[NumOfActiveSpell].SpellName1 != null)
         {
             Spell.keyClick = Input.GetKeyDown(KeyCode.R);
             Transform Parametr = null;
@@ -164,29 +131,18 @@ public class PlayerScript : MonoBehaviour
             else
                 Parametr = SpellSpawnPos;
 
-            Spells[NumOfActiveSpell].SpellCast(Parametr, cameraTransform);
+            Spells[NumOfActiveSpell].SpellCast(Parametr, SpellSpawnPos);
         }
-        //////////ДЛЯ ТЕСТИРОВАНИЯ
-        Spell.keyClick = Input.GetKeyDown(KeyCode.R);
-        Transform Parametr1 = null;
-
-        if (SpellSDataBase.Spells[NumOfActiveSpell].SpellName1 == "Blink")
-            Parametr1 = myTransform;
-        else
-            Parametr1 = SpellSpawnPos;
-
-        SpellSDataBase.Spells[NumOfActiveSpell].SpellCast(Parametr1, SpellSpawnPos);
-        ///////////////////////
     }
 
     void Update()
     {
-        //SpellChange(Spells);
-        SpellChange(SpellSDataBase.Spells);///Для тестирования
+        SpellChange();
 
         SpellCast();
 
-        ScoreRune.text = NumOfActiveSpell.ToString();//GameController.RuneCount.ToString();
+        if (Spells.Count > 0)
+            CharacterUIController.SetText(Spells[NumOfActiveSpell].SpellName1, Color.red, Spells[NumOfActiveSpell].SpellImage1);
 
         player.Turning();
         player.DamagedEffect();
@@ -194,22 +150,42 @@ public class PlayerScript : MonoBehaviour
         enabled = !player.isDead;
     }
 
-    void SpellChange(List<Spell> p_spell)
+    bool GodMode = false;
+    public static KeyCode GodModeSwitch = KeyCode.T;
+    void SpellChange()
     {
+        if(Input.GetKeyDown(GodModeSwitch))
+        {
+            if (!GodMode)
+            {
+                Spells = SpellSDataBase.Spells;
+                CharacterUIController.SetTextTrigger("Режим БОГА", Color.red);
+                GodMode = true;
+            }
+            else
+            {
+                Spells = GameController.PlayerSpells;
+                ScriptResourceRune.maxCoolDown = 10;
+                NumOfActiveSpell = 0;
+                CharacterUIController.SetTextTrigger("Режим не БОГА", Color.red);
+                GodMode = false;
+            }
+        }
+
         if (NumOfActiveSpell > 0 && Input.GetKeyDown(KeyCode.Q))
         {
             if (OnPlayerMove != null)
                 OnPlayerMove();
-            if (p_spell[NumOfActiveSpell].sp.Count > 0)
-                p_spell[NumOfActiveSpell].RemoveSpellPoints();
+            if (Spells[NumOfActiveSpell].sp.Count > 0)
+                Spells[NumOfActiveSpell].RemoveSpellPoints();
             NumOfActiveSpell--;
         }
-        if (NumOfActiveSpell < p_spell.Count - 1 && Input.GetKeyDown(KeyCode.E))
+        if (NumOfActiveSpell < Spells.Count - 1 && Spells[NumOfActiveSpell + 1].SpellName1 != null && Input.GetKeyDown(KeyCode.E))
         {
             if (OnPlayerMove != null)
                 OnPlayerMove();
-            if (p_spell[NumOfActiveSpell].sp.Count > 0)
-                p_spell[NumOfActiveSpell].RemoveSpellPoints();
+            if (Spells[NumOfActiveSpell].sp.Count > 0)
+                Spells[NumOfActiveSpell].RemoveSpellPoints();
             NumOfActiveSpell++;
         }
     }
@@ -228,14 +204,12 @@ public class PlayerScript : MonoBehaviour
 
     void OnEnable()
     {
-        OnPlayerMove += SpellSDataBase.Spells[NumOfActiveSpell].StopCast;///Для тестирования
-        if (Spells.Count > 0)
-            OnPlayerMove += Spells[NumOfActiveSpell].StopCast;
+        //if (Spells.Count > 0)
+            //OnPlayerMove += Spells[NumOfActiveSpell].StopCast;
     }
     void OnDisable()
     {
-        OnPlayerMove -= SpellSDataBase.Spells[NumOfActiveSpell].StopCast;///Для тестирования
-        if (Spells.Count > 0)
-            OnPlayerMove -= Spells[NumOfActiveSpell].StopCast;
+        //if (Spells.Count > 0)
+        //    OnPlayerMove -= Spells[NumOfActiveSpell].StopCast;
     }
 }

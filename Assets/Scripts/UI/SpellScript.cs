@@ -23,6 +23,6 @@ public class SpellScript : MonoBehaviour
     void Update()
     {
         myCollider.enabled = !UIController.isDrag;
-        UICLink.MoveThis(inSlot, ref myTransform);
+        UICLink.MoveThisSpell(inSlot, ref myTransform);
     }
 }

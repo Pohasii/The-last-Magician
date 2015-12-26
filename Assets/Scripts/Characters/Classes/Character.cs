@@ -21,9 +21,10 @@ public class Character
         MoveSpeed = p_MoveSpeed;
     }
 
-    public virtual void TakeDamage(DamageSpell SpellInfo)
+    public virtual void TakeDamage(HZSpell SpellInfo)
     {
         CurHP -= SpellInfo.SpellDamage1;
+        if(hpSlider)
         hpSlider.value = CurHP;
     }
 }

@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public class SpellSDataBase : MonoBehaviour
 {
+    public static SpellSDataBase SpellDB;
+
     public static List<Spell> Spells = new List<Spell>();
 
     public static List<Element> ElementsInDB = new List<Element>();
@@ -20,7 +22,7 @@ public class SpellSDataBase : MonoBehaviour
     List<Element> BlinkElements = new List<Element>();
     List<Element> FireAreaElements = new List<Element>();
     List<Element> BombElements = new List<Element>();
-    //List<Element> ElementsOfFireBall = new List<Element>();
+    List<Element> WaveElements = new List<Element>();
     //List<Element> ElementsOfFireBall = new List<Element>();
     //List<Element> ElementsOfFireBall = new List<Element>();
     //List<Element> ElementsOfFireBall = new List<Element>();
@@ -45,12 +47,23 @@ public class SpellSDataBase : MonoBehaviour
 
     void Awake()
     {
+        SpellDB = this;
+
         SpellPoints.lineMaterial = LineMaterial;
 
-        FireElement = new Element("Fire", "Кароче это огонь", 10, new Vector3(50, 0, -20), ElementMaterial[0], Color.red);
-        FrostElement = new Element("Frost", "Кароче это лед", 10, new Vector3(100, 0, -20), ElementMaterial[1], Color.blue);
-        ArcaneElement = new Element("Arcane", "Кароче это тайная магия", 10, new Vector3(150, 0, -20), ElementMaterial[2], Color.cyan);
-
+        if (Application.loadedLevelName == "Menu")
+        {
+            FireElement = new Element(0, "Fire", "Кароче это огонь", 10, Menu.SMenu.FireElementPos.localPosition, ElementMaterial[0]);
+            FrostElement = new Element(1, "Frost", "Кароче это лед", 10, Menu.SMenu.FrostElementPos.localPosition, ElementMaterial[1]);
+            ArcaneElement = new Element(2, "Arcane", "Кароче это тайная магия", 10, Menu.SMenu.ArcaneElementPos.localPosition, ElementMaterial[2]);
+        }
+        else
+            if (Application.loadedLevelName == "Game")
+            {
+                FireElement = new Element("Fire", "Кароче это огонь");
+                FrostElement = new Element("Frost", "Кароче это лед");
+                ArcaneElement = new Element("Arcane", "Кароче это тайная магия");
+            }
         ElementsInDB.Add(FireElement);
         ElementsInDB.Add(FrostElement);
         ElementsInDB.Add(ArcaneElement);
@@ -75,12 +88,17 @@ public class SpellSDataBase : MonoBehaviour
         BombElements.Add(FireElement);
         BombElements.Add(FrostElement);
         BombElements.Add(FrostElement);
+        //////
+        WaveElements.Add(ArcaneElement);
+        WaveElements.Add(ArcaneElement);
+        WaveElements.Add(FireElement);
         /////////////////////////////////////////
 
-        Spells.Add(new SWNP("FireBall", "p_Damage", pointObj, FireBallElements, 25f, 0f, 2f, DamageSpell.SpellDamageTypes.Fire));
-        Spells.Add(new DamageSpell("FrostBolt", "Slow", pointObj, FrostBoltElements, 1f, 1f, 2f, DamageSpell.SpellDamageTypes.Frost));
-        Spells.Add(new SWOP("Fire area", "Pian", pointObj, FireAreaElements, 10f * Time.deltaTime, 0f, 20f, DamageSpell.SpellDamageTypes.Fire));
-        Spells.Add(new SWOP("Bomb", "BOOM", pointObj, BombElements, 5, 35, 1, 10, DamageSpell.SpellDamageTypes.Fire));
+        Spells.Add(new SWNP("FireBall", "over 9000 Damage", FireBallElements, 25f, 0f, 2f, HZSpell.SpellDamageTypes.Fire));
+        //Spells.Add(new DamageSpell("FrostBolt", "Slow", pointObj, FrostBoltElements, 1f, 1f, 2f, DamageSpell.SpellDamageTypes.Frost));
+        Spells.Add(new SWOP("Fire area", "Pian", pointObj, FireAreaElements, 10f * Time.deltaTime, 0f, 20f, HZSpell.SpellDamageTypes.Fire));
+        Spells.Add(new SWOP("Bomb", "BOOM", pointObj, BombElements, 7, 2000, 35, 1, 10, HZSpell.SpellDamageTypes.Fire));
+        Spells.Add(new SWNP("Wave", "PWWQWE", WaveElements, 0f, 20, 3000, 2f));
         Spells.Add(new MovementSpell("Blink", "Blink111", BlinkElements, 0f, 0, 15f));
     }
 }

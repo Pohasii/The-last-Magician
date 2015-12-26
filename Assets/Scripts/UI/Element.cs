@@ -5,6 +5,12 @@ using System.Collections;
 [System.Serializable]
 public class Element
 {
+    int id;
+    public int Id
+    {
+        get { return id; }
+    }
+
     string Name;
     public string Name1
     {
@@ -41,11 +47,11 @@ public class Element
         set { material = value; }
     }
 
-    Color color;
-    public Color Color1
+    Sprite Sprite;
+    public Sprite Sprite1
     {
-        get { return color; }
-        set { color = value; }
+        get { return Sprite; }
+        set { Sprite = value; }
     }
 
     public Element()
@@ -53,13 +59,20 @@ public class Element
     
     }
 
-    public Element(string p_Name, string p_Description, int p_Cost, Vector3 p_StartPos, Material p_Material, Color p_Color)
+    public Element(int p_id ,string p_Name, string p_Description, int p_Cost, Vector3 p_StartPos, Material p_Material)
     {
+        id = p_id;
         Name = p_Name;
         Description = p_Description;
         cost = p_Cost;
-        StartPos = p_StartPos;
         material = p_Material;
-        color = p_Color;
+        StartPos = p_StartPos;
+        Sprite = Resources.Load<Sprite>("ElementsImage/" + p_Name);
+    }
+
+    public Element(string p_Name, string p_Description)
+    {
+        Name = p_Name;
+        Description = p_Description;
     }
 }

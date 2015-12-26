@@ -24,9 +24,9 @@ public class VoidZoneSpellBehaviour : MonoBehaviour
         enemyScript = col.GetComponent<EnemyScript>();
 
         if (enemyScript)
-            enemyScript.enemy.TakeDamage((DamageSpell)spell);
+            enemyScript.enemy.TakeDamage((HZSpell)spell);
         if (playerScript)
-            playerScript.player.TakeDamage((DamageSpell)spell);
+            playerScript.player.TakeDamage((HZSpell)spell);
     }
 
     public void SpellSetap(Spell newSpell)

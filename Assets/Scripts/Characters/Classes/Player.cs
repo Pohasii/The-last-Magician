@@ -20,15 +20,15 @@ public class Player : Character
 
     Transform cameraTransform;
     private float cameraRotation;
-    public float minimumY = -65;
-    public float maximumY = 65;
-    float rotationSpeed = 15;
+    public float minimumY = -35;
+    public float maximumY = 45;
+    float rotationSpeed = 30;
 
     public static Slider playerHPSlider;
 
     public List<Spell> Seplls;
 
-    public Player(Transform mytransform, Rigidbody myrigidbody, List<Spell> p_Spells, float p_HP, float p_MoveSpeed, float p_HPRegen)
+    public Player(List<Spell> p_Spells, float p_HP, float p_HPRegen, float p_MoveSpeed)
         : base(0, p_HP, p_HPRegen, p_MoveSpeed)
     {
         isDead = false;
@@ -36,14 +36,14 @@ public class Player : Character
 
         Seplls = p_Spells;
 
-        myTransform = mytransform;
-        myRigidbody = myrigidbody;
+        myTransform = PlayerScript.myTransform;
+        myRigidbody = PlayerScript.myRigidBody;
 
         hpSlider = playerHPSlider;
         hpSlider.maxValue = MaxHP;
         hpSlider.value = MaxHP;
 
-        cameraTransform = mytransform.GetChild(0);//Camera.main.transform;
+        cameraTransform = myTransform.GetChild(0);//Camera.main.transform;
     }
 
     public void Move(float h, float v)
@@ -89,7 +89,7 @@ public class Player : Character
         }
     }
 
-    public override void TakeDamage(DamageSpell SpellInfo)
+    public override void TakeDamage(HZSpell SpellInfo)
     {
         TakeDamageBase(SpellInfo.SpellDamage1);
     }

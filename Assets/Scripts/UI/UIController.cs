@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class UIController : MonoBehaviour
 {
@@ -32,7 +34,7 @@ public class UIController : MonoBehaviour
             if (hit.collider.tag == "Spell")
             {
                 if (!isDrag)
-                    menu.ShowToolTip(hit.transform.GetComponent<RectTransform>().anchoredPosition, hit.transform.GetComponent<SpellScript>().spell);
+                    menu.ShowToolTip(hit.transform.GetComponent<RectTransform>().localPosition, hit.transform.GetComponent<SpellScript>().spell);
 
                 if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
@@ -77,7 +79,7 @@ public class UIController : MonoBehaviour
             if (hit.collider.tag == "Element")
             {
                 if (!isDrag)
-                    menu.ShowToolTip(hit.transform.GetComponent<RectTransform>().anchoredPosition, hit.transform.GetComponent<ElementScript>().element);
+                    menu.ShowToolTip(hit.transform.GetComponent<RectTransform>().localPosition, hit.transform.GetComponent<ElementScript>().element);
 
                 if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
@@ -101,7 +103,7 @@ public class UIController : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.Mouse1) && !hit.collider.GetComponent<ElementScript>().InSlot)
                 {
-                    menu.ElementRepick(hit.collider.GetComponent<ElementScript>().inSlot, hit.collider.gameObject, true);
+                    menu.ElementReshuffle(hit.collider.GetComponent<ElementScript>().inSlot, hit.collider.gameObject, true);
                 }
             }
             else
@@ -113,7 +115,7 @@ public class UIController : MonoBehaviour
             if (isDrag && DraggingObj.tag == "Element")
             {
                 MoveVector = new Vector3(hit.point.x, hit.point.y, DraggingObj.transform.position.z);
-                RepickElement(hit);
+                ReshuffleElement(hit);
             }
         }
 
@@ -129,16 +131,17 @@ public class UIController : MonoBehaviour
         }
     }
 
-    public void MoveThis(int inSlot, ref RectTransform ObjTransform)
+    public void MoveThisSpell(int inSlot, ref RectTransform ObjTransform)
     {
         if (!isDrag)
         {
             Vector3 WayPoint = menu.SlotsForSpells[inSlot].GetComponent<RectTransform>().position;
             ObjTransform.position = Vector3.Lerp(ObjTransform.position, WayPoint, 0.3f);
+            ObjTransform.localPosition -= Vector3.forward;
         }
     }
 
-    public void MoveThis(int inSlot, ref RectTransform ObjTransform, Vector3 StartPos)
+    public void MoveThisElement(int inSlot, ref RectTransform ObjTransform, Vector3 StartPos)
     {
         Vector3 WayPoint = StartPos;
         if (!isDrag)
@@ -155,11 +158,12 @@ public class UIController : MonoBehaviour
             if (ObjTransform.GetComponent<ElementScript>().InSlot)
             {
                 WayPoint = menu.SlotsForElements[inSlot].GetComponent<RectTransform>().position;
-                ObjTransform.position = Vector3.Slerp(ObjTransform.position, WayPoint, 0.3f);
+                ObjTransform.position = Vector3.Lerp(ObjTransform.position, WayPoint, 0.3f);
+                ObjTransform.localPosition -= Vector3.forward;
             }
             else
             {
-                ObjTransform.anchoredPosition3D = Vector3.Slerp(ObjTransform.anchoredPosition3D, StartPos, 0.3f);
+                ObjTransform.anchoredPosition3D = Vector3.Lerp(ObjTransform.anchoredPosition3D, StartPos - Vector3.forward, 0.3f);
             }
         }
     }
@@ -183,20 +187,20 @@ public class UIController : MonoBehaviour
         }
     }
 
-    void RepickElement(RaycastHit hit)
+    void ReshuffleElement(RaycastHit hit)
     {
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {
             if (hit.collider.tag == "SlotForElements")
             {
                 Slot tempESlot = hit.collider.GetComponent<Slot>();
-                menu.ElementRepick(tempESlot.CurSlot, DraggingObj, false);
+                menu.ElementReshuffle(tempESlot.CurSlot, DraggingObj, false);
             }
             if (hit.collider.tag == "Element")
             {
                 ElementScript tempEScript = DraggingObj.GetComponent<ElementScript>();
                 if (tempEScript.InSlot)
-                    menu.ElementRepick(tempEScript.inSlot, hit.collider.gameObject, false);
+                    menu.ElementReshuffle(tempEScript.inSlot, hit.collider.gameObject, false);
             }
 
             if (hit.collider.tag == "BackGround")

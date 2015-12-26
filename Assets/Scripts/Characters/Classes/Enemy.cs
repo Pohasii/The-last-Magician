@@ -21,7 +21,12 @@ public class Enemy : Character
     float timer;
     float EnemyAttacDelay;
 
-    PlayerScript playerScripts;
+    bool isDead;
+    public bool IsDead
+    {
+        get { return isDead; }
+        set { isDead = value; }
+    }
 
     Animator anim;
 
@@ -39,41 +44,55 @@ public class Enemy : Character
         hpSlider.maxValue = MaxHP;
         hpSlider.value = CurHP;
 
-        Target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-        playerScripts = Target.GetComponent<PlayerScript>();
+        Target = PlayerScript.playerScript.GetComponent<Transform>();
         EnemyNav = nav;
         anim = p_anim;
+
+        isDead = false;
     }
 
     public void Move(Transform myTransform)
     {
-        if (!playerScripts.player.isDead)
+        if (!PlayerScript.playerScript.player.isDead)
             EnemyNav.SetDestination(Target.position);
         else
             EnemyNav.Stop();
+    }
 
+    public void Dead(Transform myTransform, string p_name)
+    {
         if (CurHP <= 0)
         {
-            GameObject.Instantiate(ScoreRune, myTransform.position, Quaternion.identity);
-            anim.SetTrigger("Dead");
+            if (!IsDead)
+            {
+                GameObject.Instantiate(ScoreRune, myTransform.position + Vector3.up, Quaternion.identity);
+                GameController.RespNewEnemy(p_name);
+                anim.SetTrigger("Dead");
+                myTransform.GetComponent<EnemyScript>().DisableComponents();
+                hpSlider.gameObject.SetActive(false);
+                GameObject.Destroy(myTransform.gameObject, 3);
+                IsDead = true;
+            }
         }
     }
 
     public void AttacTrigger()
     {
         timer += Time.deltaTime;
-        if (timer >= EnemyAttacDelay && playerInRange && !playerScripts.player.isDead)
+        if (timer >= EnemyAttacDelay && playerInRange && !PlayerScript.playerScript.player.isDead)
         {
             Attac();
         }
+        if (PlayerScript.playerScript.player.isDead)
+            anim.SetBool("Attac", false);
     }
 
     public void Attac()
     {
         timer = 0f;
-        if (!playerScripts.player.isDead)
+        if (!PlayerScript.playerScript.player.isDead)
         {
-            playerScripts.player.TakeDamageBase(Damage);
+            PlayerScript.playerScript.player.TakeDamageBase(Damage);
         }
     }
 }

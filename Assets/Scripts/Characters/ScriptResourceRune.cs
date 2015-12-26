@@ -4,24 +4,30 @@ using System.Collections;
 
 public class ScriptResourceRune : MonoBehaviour
 {
+    public int i;
     public Element element;
-    public float maxCoolDown;
+    public static float maxCoolDown;
     public float CurCoolDown;
     Transform myTransform;
     public bool continueCD;
-    bool hz;
+    bool CDStart;
 
     void Start()
     {
+        element = SpellSDataBase.ElementsInDB[i];
         myTransform = GetComponent<Transform>();
-        maxCoolDown = 0;
-        GetComponent<Image>().color = element.Color1;
+        maxCoolDown = 10;
+        GetComponent<Image>().sprite = element.Sprite1;
     }
 
     void Update()
     {
         CoolDown();
         CD();
+        if (Input.GetKeyDown(PlayerScript.GodModeSwitch))
+        {
+            ResetCoolDown();
+        }
     }
 
     public void CD()
@@ -34,7 +40,7 @@ public class ScriptResourceRune : MonoBehaviour
     {
         if (CurCoolDown > 0)
         {
-            if(hz)
+            if(CDStart)
             CurCoolDown -= Time.deltaTime;
 
             myTransform.GetChild(0).gameObject.GetComponent<Image>().enabled = true;
@@ -48,14 +54,20 @@ public class ScriptResourceRune : MonoBehaviour
         }
     }
 
-    public void StartCD(bool p_hz)
+    public void StartCD(bool p_CDStart)
     {
-        hz = p_hz;
+        CDStart = p_CDStart;
         CurCoolDown = maxCoolDown;
     }
 
     public void ContinueCD()
     {
         continueCD = true;
+    }
+
+    public void ResetCoolDown()
+    {
+        CurCoolDown = 0;
+        maxCoolDown = 0;
     }
 }

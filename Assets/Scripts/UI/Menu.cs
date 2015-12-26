@@ -5,42 +5,60 @@ using System.Collections.Generic;
 
 public class Menu : MonoBehaviour
 {
+    public static Menu SMenu;
     [SerializeField]
-    private GameObject BackGround;
+    private GameObject BackGround, SlotForSpells;//задний фон и префаб слота для спелов
 
-    public List<Spell> SpellInSlot = new List<Spell>();
-    public List<GameObject> SlotsForSpells = new List<GameObject>();
-    public List<GameObject> SpellsObjInSlot = new List<GameObject>();
+    public List<Spell> SpellInSlot = new List<Spell>();//спелы в слоте
+    public List<GameObject> SlotsForSpells = new List<GameObject>();//слоты для спелов
+    public List<GameObject> SpellsObjInSlot = new List<GameObject>();//объекты спелов в слоте
 
-    public List<Element> ElementsInSlots = new List<Element>();
-    public List<GameObject> SlotsForElements = new List<GameObject>();
-    public List<GameObject> ElementsObjInSlot = new List<GameObject>();
+    public List<Element> ElementsInSlots = new List<Element>();//елементы в слоте
+    public List<GameObject> SlotsForElements = new List<GameObject>();//слоты для елементов
+    public List<GameObject> ElementsObjInSlot = new List<GameObject>();//объекты елементов в слоте
 
-    public GameObject UISpellPrefab, UIElementPrefab;
+    public GameObject UISpellPrefab, UIElementPrefab;//префабы спела и елемента для интерфейса
+
+    public RectTransform FireElementPos, FrostElementPos, ArcaneElementPos;//стартовые позиции елементов
+    public Text[] ElementCountText;//Текст для отображения количества елементов
+    [HideInInspector]
+    public List<ElementScript> FireELementCount, FrostElementCount, ArcaneElementCount = new List<ElementScript>();
+
+    public List<Text> StatsText = new List<Text>();//компонент Text для вывода характеристик персонажа
 
     [SerializeField]
-    private GameObject ToolTip;
+    private GameObject ToolTip;//префаб всплывающей подсказки
 
     [SerializeField]
-    private Text RuneCountText;
+    private Text RuneCountText;//компонент Text для вывода количества рун
     [SerializeField]
-    private Animator animator;
+    private Animator animator;//компонент Animator для анимации всплывающего сообщения
+
+    void Awake()
+    {
+        SMenu = this;
+    }
 
     void Start()
     {
         BackGround = GameObject.FindGameObjectWithTag("MenuBackGround");
         BackGround.transform.SetAsFirstSibling();
+        CharactersDB.characterDB.SetStatsText(StatsText);
     }
 
     void Update()
     {
+        ElementCountText[0].text = FireELementCount.Count.ToString();
+        ElementCountText[1].text = FrostElementCount.Count.ToString();
+        ElementCountText[2].text = ArcaneElementCount.Count.ToString();
+
         RuneCountText.text = GameController.RuneCount.ToString();
     }
 
     public void ShowToolTip(Vector3 Position, Element element) //Для компонентов
     {
         ToolTip.SetActive(true);
-        ToolTip.GetComponent<RectTransform>().anchoredPosition = new Vector3(Position.x + 10, Position.y - 10, -30);
+        ToolTip.GetComponent<RectTransform>().localPosition = new Vector3(Position.x + 10, Position.y - 10, -31);
         ToolTip.transform.GetChild(0).GetComponent<Text>().text = element.Name1;
         ToolTip.transform.GetChild(1).GetComponent<Text>().text = element.Description1;
         ToolTip.transform.SetAsLastSibling();
@@ -49,7 +67,7 @@ public class Menu : MonoBehaviour
     public void ShowToolTip(Vector3 Position, Spell spell) // Для спелов
     {
         ToolTip.SetActive(true);
-        ToolTip.GetComponent<RectTransform>().anchoredPosition = new Vector3(Position.x + 25, Position.y - 25, Position.z);
+        ToolTip.GetComponent<RectTransform>().localPosition = new Vector3(Position.x + 25, Position.y - 25, -31);
         ToolTip.transform.GetChild(0).GetComponent<Text>().text = spell.SpellName1;
         ToolTip.transform.GetChild(1).GetComponent<Text>().text = spell.SpellDescription1;
         ToolTip.transform.SetAsLastSibling();
@@ -89,19 +107,37 @@ public class Menu : MonoBehaviour
         }
     }
 
+    public void SlotForSpellsCreate()
+    {
+        if (SpellInSlot[0].SpellName1 == null)
+            return;
+        GameObject slot = Instantiate(SlotForSpells);
+        slot.transform.SetParent(SlotForSpells.transform.parent);
+        slot.GetComponent<RectTransform>().localScale = SlotForSpells.transform.localScale;
+        slot.GetComponent<RectTransform>().localPosition = SlotForSpells.GetComponent<RectTransform>().localPosition + Vector3.right * SlotForSpells.GetComponent<RectTransform>().localScale.x * SlotsForSpells.Count;
+        slot.GetComponent<Slot>().CurSlot = SlotsForSpells.Count;
+        SlotsForSpells.Add(slot);
+        SpellInSlot.Add(new Spell());
+        SpellsObjInSlot.Add(null);
+        if (SpellInSlot.Count < 1)
+            return;
+        slot.transform.parent.GetComponent<RectTransform>().sizeDelta += Vector2.right * SlotForSpells.GetComponent<RectTransform>().localScale.x;
+    }
+
     public void CreateSpell(Spell CreatedSpell)
     {
+        SlotForSpellsCreate();
         for (int i = 0; i < SpellInSlot.Count; i++)
         {
             if (SpellInSlot[i].SpellName1 == null)
             {
-                GameObject ob = (GameObject)Instantiate(UISpellPrefab, Vector3.down * 5, Quaternion.identity);
+                GameObject ob = (GameObject)Instantiate(UISpellPrefab, Vector3.down * 5, UISpellPrefab.transform.rotation);
                 SpellInSlot[i] = CreatedSpell;
                 SpellsObjInSlot[i] = ob;
-                ob.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").GetComponent<RectTransform>());
+                ob.transform.SetParent(GetComponent<RectTransform>());
                 ob.GetComponent<SpellScript>().spell = CreatedSpell;
                 ob.GetComponent<SpellScript>().inSlot = i;
-                ob.GetComponent<RectTransform>().localScale = new Vector3(30, 30, 15);
+                ob.GetComponent<RectTransform>().localScale = UISpellPrefab.transform.localScale;
                 break;
             }
         }
@@ -113,9 +149,9 @@ public class Menu : MonoBehaviour
         {
             GameObject ob = (GameObject)Instantiate(UIElementPrefab, Vector3.up * 10, Quaternion.identity);
             GameController.RuneCount -= p_element.Cost1;
-            ob.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").GetComponent<RectTransform>());
+            ob.transform.SetParent(GetComponent<RectTransform>());
             ob.GetComponent<ElementScript>().element = p_element;
-            ob.GetComponent<RectTransform>().localScale = new Vector3(30, 30, 15);
+            ob.GetComponent<RectTransform>().localScale = UIElementPrefab.transform.localScale;
         }
         else
         {
@@ -123,11 +159,10 @@ public class Menu : MonoBehaviour
         }
     }
 
-    public void ElementRepick(int ElementSloTNum, GameObject elementObj, bool hz)
+    public void ElementReshuffle(int ElementSloTNum, GameObject elementObj, bool OnceClick)
     {
         ElementScript tempEScript = elementObj.GetComponent<ElementScript>();
-
-        if (hz)
+        if (OnceClick)
         {
             for (int i = 0; i < ElementsInSlots.Count; i++)
             {
@@ -153,7 +188,6 @@ public class Menu : MonoBehaviour
                 if (tempEScript.InSlot)
                 {
                     ElementsObjInSlot[ElementSloTNum].GetComponent<ElementScript>().inSlot = tempEScript.inSlot;
-
                     ElementsObjInSlot[tempEScript.inSlot] = ElementsObjInSlot[ElementSloTNum];
                     ElementsInSlots[tempEScript.inSlot] = ElementsInSlots[ElementSloTNum];
                 }
@@ -185,40 +219,8 @@ public class Menu : MonoBehaviour
         tempSpellScript.inSlot = SpellSlotNum;
     }
 
-    public bool OneClick = false;
-    float timer = 0;
-
-    public bool DoubleClick()
-    {
-        float delay = 0.5f;
-
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            if (OneClick)
-            {
-                if ((Time.time - timer) <= delay)
-                {
-                    OneClick = false;
-                    return true;
-                }
-                else
-                {
-                    OneClick = false;
-                    return false;
-                }
-            }
-            else
-            {
-                OneClick = true;
-                timer = Time.time;
-            }
-        }
-        return false;
-    }
-
     public void LoadLevel()
     {
         GameController.PlayerSpells = SpellInSlot;
-        Application.LoadLevel("MainGameScene");
     }
 }

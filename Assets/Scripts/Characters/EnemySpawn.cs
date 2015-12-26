@@ -5,7 +5,7 @@ using System.Collections;
 public class EnemySpawn : MonoBehaviour
 {
     Transform myTransform;
-
+    public static bool BossResp;
     public GameObject EnemyBoss, EnemyCreep;
 
     void OnEnable()
@@ -19,6 +19,7 @@ public class EnemySpawn : MonoBehaviour
 
     void Start()
     {
+        BossResp = false;
         myTransform = GetComponent<Transform>();
         GameController.EnemySpawnPoints.Add(gameObject);
         NewCreepWave();
@@ -35,13 +36,14 @@ public class EnemySpawn : MonoBehaviour
     public void NewCreepWave()
     {
         InvokeRepeating("SpawnCreeps", 0, 5);
+        CharacterUIController.SetTextTrigger(GameController.CreepWave.ToString(), Color.red);
     }
 
     public void SpawnCreeps()
     {
         GameObject creep = (GameObject)Instantiate(EnemyCreep, myTransform.position, Quaternion.identity);
         creep.name = "Creep";
-        GameController.CurEnemyCount++;
+        GameController.CurCreepCount++;
         GameController.TotalEnemyCount++;
     }
 
@@ -49,5 +51,8 @@ public class EnemySpawn : MonoBehaviour
     {
         GameObject boss = (GameObject)Instantiate(EnemyBoss, myTransform.position, Quaternion.identity);
         boss.name = "Boss";
+        GameController.CurBossCount++;
+        GameController.TotalEnemyCount++;
+        BossResp = true;
     }
 }

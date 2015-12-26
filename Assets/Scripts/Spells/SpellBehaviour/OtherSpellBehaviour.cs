@@ -26,7 +26,7 @@ public class OtherSpellBehaviour : MonoBehaviour
         PS.Play();
         Destroy(gameObject, PS.duration * 2);
 
-        Collider[] colliders = Physics.OverlapSphere(myTransform.position, ((SWOP)spell).Radius, LayerMask.GetMask("Character"));
+        Collider[] colliders = Physics.OverlapSphere(myTransform.position, spell.Radius, LayerMask.GetMask("Character"));
 
         for (int i = 0; i < colliders.Length; i++)
         {
@@ -36,7 +36,7 @@ public class OtherSpellBehaviour : MonoBehaviour
             if (!targetRigidbody)
                 continue;
 
-            targetRigidbody.AddExplosionForce(1000, myTransform.position, ((SWOP)spell).Radius);
+            targetRigidbody.AddExplosionForce(spell.ExplosionForce1, myTransform.position, spell.Radius);
 
             EnemyScript enemyScript = targetRigidbody.GetComponent<EnemyScript>();
             PlayerScript playerScript = targetRigidbody.GetComponent<PlayerScript>();
@@ -44,9 +44,9 @@ public class OtherSpellBehaviour : MonoBehaviour
             if (!enemyScript && !playerScript)
                 continue;
             if (enemyScript)
-                enemyScript.enemy.TakeDamage((DamageSpell)spell);
+                enemyScript.enemy.TakeDamage((HZSpell)spell);
             if (playerScript)
-                playerScript.player.TakeDamage((DamageSpell)spell);
+                playerScript.player.TakeDamage((HZSpell)spell);
         }
 
     }

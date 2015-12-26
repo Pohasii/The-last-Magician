@@ -4,6 +4,8 @@ using System.Collections;
 public class EnemyScript : MonoBehaviour
 {
     Transform myTransform;
+    Rigidbody myRigidbody;
+    Collider myCollider;
     NavMeshAgent Nav;
     public float AttacDelay;
     public float Damage;
@@ -14,64 +16,47 @@ public class EnemyScript : MonoBehaviour
     public float MPRegen;
 
     public Canvas canvas;
-    public GameObject ScoreRune;
 
     public Enemy enemy;
     public Animator anim;
 
     void Start()
     {
-        Enemy.ScoreRune = ScoreRune;
+        myRigidbody = GetComponent<Rigidbody>();
+        myCollider = GetComponent<Collider>();
         myTransform = GetComponent<Transform>();
         Nav = GetComponent<NavMeshAgent>();
+        StateByWave();
         enemy = new Enemy(anim, Nav, canvas, Damage, AttacDelay, HP, MP, HPRegen, MPRegen);
     }
 
     void Update()
     {
-        enemy.Move(myTransform);
-        enemy.AttacTrigger();
-
-        if (enemy.CurHP <= 0)
+        if (!enemy.IsDead)
         {
-            GameController.RespNewEnemy(name);
-            Destroy(gameObject);
+            enemy.Move(myTransform);
+            enemy.AttacTrigger();
         }
+
+        enemy.Dead(myTransform, name);
     }
 
-    void RespNewEnemy()
+    void StateByWave()
     {
-        if (enemy.CurHP <= 0)
-        {
-            if (name == "Creep")
-            {
-                GameController.CurEnemyCount--;
-            }
-            if (GameController.TotalEnemyCount < 20)
-            {
-                if (GameController.CurEnemyCount < GameController.TotalEnemyCount)
-                {
-                    GameController.EnemySpawnPoints[Random.Range(0, GameController.EnemySpawnPoints.Count)].SendMessage("SpawnCreeps");
-                }
-            }
-            else
-            {
-                if (GameController.CurEnemyCount == 4)
-                {
-                    GameController.EnemySpawnPoints[Random.Range(0, GameController.EnemySpawnPoints.Count)].SendMessage("SpawnBoss");
-                }
-                else if (GameController.CurEnemyCount == 0)
-                {
-                    //Time.timeScale = 0;
-                }
-            }
-            Destroy(gameObject);
-        }
+        HP *= GameController.CreepWave;
+    }
+
+    public void DisableComponents()
+    {
+        myRigidbody.isKinematic = true;
+        myCollider.enabled = false;
+        Nav.enabled = false;
+        anim.SetBool("Attac", false);
     }
 
     void OnTriggerEnter(Collider col)
     {
-        if (col.tag == "Player")
+        if (!enemy.IsDead && col.tag == "Player")
         {
             anim.SetBool("Attac", true);
             enemy.PlayerInRange = true;

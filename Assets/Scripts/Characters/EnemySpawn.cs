@@ -21,7 +21,10 @@ public class EnemySpawn : MonoBehaviour
     {
         BossResp = false;
         myTransform = GetComponent<Transform>();
-        GameController.EnemySpawnPoints.Add(gameObject);
+
+        if (GameController.EnemySpawnPoints.Count < 4)
+            GameController.EnemySpawnPoints.Add(gameObject);
+
         NewCreepWave();
     }
 

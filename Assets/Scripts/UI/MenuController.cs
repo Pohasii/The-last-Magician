@@ -7,15 +7,18 @@ public class MenuController : MonoBehaviour
 {
     public static MenuController menuController;
 
-    public GameObject mainMenu, gameMenu;//главное меню и игровое меню
-    public Animator anim;//для анимации подтверждения выхода из игры
+    public GameObject mainMenu, gameMenu;//Главное меню и игровое меню
+    public Animator anim;//Для анимации подтверждения выхода из игры
     public GameObject ElementCreateBar;//Панель покупки рун
-    public GameObject Panel;//невидимая панель при нажатии на которой закрываются все елементы интерфеса
+    public GameObject Panel;//Невидимая панель при нажатии на которой закрываются все елементы интерфеса
+    public GameObject HelpWindow;//Помощь
     public static List<Animator> PopUpMenuAnimList = new List<Animator>();//анимация всплывающего меню
 
     void Awake()
     {
+        PopUpMenuAnimList.Clear();
         menuController = this;
+        Cursor.visible = true;
     }
 
     public void ShowCreateElementBar()
@@ -43,5 +46,14 @@ public class MenuController : MonoBehaviour
         LevelManager.levelManager.BeginFade(-1);
         CurUI.SetActive(false);
         NextUI.SetActive(true);
+    }
+
+    public IEnumerator NextMenu()
+    {
+        LevelManager.levelManager.BeginFade(1);
+        yield return new WaitForSeconds(LevelManager.levelManager.FadeSpeed);
+        LevelManager.levelManager.BeginFade(-1);
+        mainMenu.SetActive(false);
+        gameMenu.SetActive(true);
     }
 }

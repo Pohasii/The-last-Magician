@@ -43,7 +43,9 @@ public class EnemyScript : MonoBehaviour
 
     void StateByWave()
     {
-        HP *= GameController.CreepWave;
+        HP *= 1.5f;
+        Nav.speed += GameController.CreepWave;
+        Damage += GameController.CreepWave + (10 * (GameController.CreepWave -1));
     }
 
     public void DisableComponents()

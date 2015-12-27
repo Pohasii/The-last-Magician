@@ -32,7 +32,6 @@ public class SingleSpellBehaviour : MonoBehaviour
     void OnTriggerEnter(Collider col)
     {
         SingleSpell(col);
-
     }
 
     public void SpellSetap(Spell newSpell)

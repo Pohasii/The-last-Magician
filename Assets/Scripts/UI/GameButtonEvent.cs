@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 
@@ -10,9 +11,9 @@ public class GameButtonEvent : MonoBehaviour, IPointerDownHandler
         {
             switch (name)
             {
-                case "Continue": ; break;
-                case "Settings": break;
-                case "Exit": StartCoroutine(LevelManager.levelManager.LoadLevelWithFade(LevelManager.levelManager.Loadlevel, "Menu")); break;
+                case "Continue": CharacterUIController.charUIController.CloseInGameMenu(); break;
+                case "Settings": CharacterUIController.charUIController.HelpWindow.gameObject.SetActive(true); break;
+                case "Exit": Time.timeScale = 1; StartCoroutine(LevelManager.levelManager.LoadLevelWithFade(LevelManager.levelManager.LoadLevelFromGame, "Menu")); break;
             }
         }
     }

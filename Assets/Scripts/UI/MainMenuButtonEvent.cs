@@ -16,9 +16,12 @@ public class MainMenuButtonEvent : MonoBehaviour, IPointerDownHandler, IPointerE
             switch (name)
             {
                 case "Start": StartCoroutine(MenuController.menuController.NextMenu(MenuController.menuController.mainMenu, MenuController.menuController.gameMenu)); break;
+                case "Help": MenuController.menuController.HelpWindow.SetActive(true); break;
+                case "Exit": Exit(true); break;
+
+                case "Close": transform.parent.gameObject.SetActive(false); break;
                 case "Yes": Application.Quit(); break;
                 case "No": Exit(false); break;
-                case "Exit": Exit(true); break;
             }
         }
 

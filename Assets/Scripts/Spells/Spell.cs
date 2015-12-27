@@ -83,8 +83,18 @@ public class Spell
         isCast = false;
     }
 
+    public Spell(string p_Name, string p_Description, float CastTime, float p_LifeTime)
+    {
+        SpellName = p_Name;
+        SpellDescription = p_Description;
+        SpellCastTime = CastTime;
+        SpellLifeTime = p_LifeTime;
+        isCast = false;
+    }
+
     public virtual void SpellCast(Transform SpawnPos, Transform cameraTransform)
     {
+        PlayerScript.playerScript.anim.SetTrigger("Cast");
     }
 
     public void CastSpellWithPoint(Transform SpawnPos, Transform cameraTransform)
@@ -197,6 +207,15 @@ public class HZSpell : Spell
         set { SpellObj = value; }
     }
 
+    public HZSpell(string p_Name, string p_Description, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
+        : base(p_Name, p_Description, CastTime, p_LifeTime)
+    {
+        SpellDamage = Damage;
+        SpellDamageType = DamageType;
+
+        SpellObj = Resources.Load<GameObject>("SpellsPrefab/" + p_Name);
+    }
+
     public HZSpell(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
         : base(p_Name, p_Description, Components, CastTime, p_LifeTime)
     {
@@ -225,10 +244,17 @@ public class HZSpell : Spell
 
 public class SWNP : HZSpell
 {
+    public SWNP(string p_Name, string p_Description, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
+        : base(p_Name, p_Description, Damage, CastTime, p_LifeTime, DamageType)
+    {
+
+    }
+
     public SWNP(string p_Name, string p_Description, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
         : base(p_Name, p_Description, Components, Damage, CastTime, p_LifeTime, DamageType)
     {
     }
+
     public SWNP(string p_Name, string p_Description, List<Element> Components, float p_CastTime, float p_Radius, float p_ExpForce, float p_LifeTime)
         : base(p_Name, p_Description, Components, p_CastTime, p_LifeTime)
     {
@@ -236,13 +262,23 @@ public class SWNP : HZSpell
         Radius = p_Radius;
     }
 
+    public void Attac(Transform SpawnPos, Transform cameraTransform)
+    {
+        base.SpellCast(SpawnPos, cameraTransform);
+        GameObject ob = (GameObject)GameObject.Instantiate(SpellObj1, SpawnPos.position, cameraTransform.rotation);
+        ob.SendMessage("SpellSetap", this);
+    }
+
     public override void SpellCast(Transform SpawnPos, Transform cameraTransform)
     {
         if (keyClick)
+        {
+            base.SpellCast(SpawnPos, cameraTransform);
             if (playerScript.CheckRuneCD(this))
                 isCast = true;
             else
                 CharacterUIController.SetTextTrigger("Not enough runes", Color.red);
+        }
         base.SpellCastInvoke(SpawnPos, cameraTransform);
     }
 
@@ -267,6 +303,7 @@ public class SWOP : HZSpell
         ExplosionForce1 = p_ExpForce;
         Radius = p_Radius;
     }
+
     bool SpellPointInRange;
     public override void SpellCast(Transform SpawnPos, Transform cameraTransform)
     {
@@ -339,20 +376,20 @@ public class MovementSpell : Spell
     //GameObject ob;
     public override void SpellCast(Transform SpawnPos, Transform cameraTransform)
     {
-     /*   if (!lObj)                                                                    Для визуализации дальности блинка
-        {
-            lObj = new GameObject();
-            Lline = lObj.AddComponent<LineRenderer>();
-            Lline.SetWidth(0.4f, 0.4f);
-            ob = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            ob.transform.localScale = Vector3.one * 2;
-        }
-        else
-        {
-            ob.transform.position = cameraTransform.position + cameraTransform.forward * SpellTeleportDistance;
-            Lline.SetPosition(0, cameraTransform.position);
-            Lline.SetPosition(1, cameraTransform.position + cameraTransform.forward * SpellTeleportDistance);
-        }*/
+        /*   if (!lObj)                                                                    Для визуализации дальности блинка
+           {
+               lObj = new GameObject();
+               Lline = lObj.AddComponent<LineRenderer>();
+               Lline.SetWidth(0.4f, 0.4f);
+               ob = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+               ob.transform.localScale = Vector3.one * 2;
+           }
+           else
+           {
+               ob.transform.position = cameraTransform.position + cameraTransform.forward * SpellTeleportDistance;
+               Lline.SetPosition(0, cameraTransform.position);
+               Lline.SetPosition(1, cameraTransform.position + cameraTransform.forward * SpellTeleportDistance);
+           }*/
 
         if (keyClick)
             if (playerScript.CheckRuneCD(this))
@@ -364,7 +401,6 @@ public class MovementSpell : Spell
 
     public override void SpellCastBase(Transform myTransform, Transform cameraTransform)
     {
-        base.SpellCastBase(myTransform, cameraTransform);
         if (playerScript.CheckRuneCD(this))
         {
             playerScript.RuneCoolDown(this);

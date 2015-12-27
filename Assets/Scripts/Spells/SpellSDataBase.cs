@@ -5,9 +5,8 @@ using System.Collections.Generic;
 
 public class SpellSDataBase : MonoBehaviour
 {
-    public static SpellSDataBase SpellDB;
-
     public static List<Spell> Spells = new List<Spell>();
+    public static SWNP Attac;
 
     public static List<Element> ElementsInDB = new List<Element>();
     public static Element FireElement, FrostElement, ArcaneElement;
@@ -47,7 +46,8 @@ public class SpellSDataBase : MonoBehaviour
 
     void Awake()
     {
-        SpellDB = this;
+        if (Spells.Count > 0)
+            return;
 
         SpellPoints.lineMaterial = LineMaterial;
 
@@ -94,10 +94,12 @@ public class SpellSDataBase : MonoBehaviour
         WaveElements.Add(FireElement);
         /////////////////////////////////////////
 
+        Attac = new SWNP("Attac", "Base Attac", 5f, 0f, 0.3f, HZSpell.SpellDamageTypes.Fire);
+
         Spells.Add(new SWNP("FireBall", "over 9000 Damage", FireBallElements, 25f, 0f, 2f, HZSpell.SpellDamageTypes.Fire));
         //Spells.Add(new DamageSpell("FrostBolt", "Slow", pointObj, FrostBoltElements, 1f, 1f, 2f, DamageSpell.SpellDamageTypes.Frost));
         Spells.Add(new SWOP("Fire area", "Pian", pointObj, FireAreaElements, 10f * Time.deltaTime, 0f, 20f, HZSpell.SpellDamageTypes.Fire));
-        Spells.Add(new SWOP("Bomb", "BOOM", pointObj, BombElements, 7, 2000, 35, 1, 10, HZSpell.SpellDamageTypes.Fire));
+        Spells.Add(new SWOP("Bomb", "BOOM", pointObj, BombElements, 7, 2000, 35, 0.5f, 10, HZSpell.SpellDamageTypes.Fire));
         Spells.Add(new SWNP("Wave", "PWWQWE", WaveElements, 0f, 20, 3000, 2f));
         Spells.Add(new MovementSpell("Blink", "Blink111", BlinkElements, 0f, 0, 15f));
     }

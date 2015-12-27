@@ -16,7 +16,7 @@ public class Player : Character
 
     public static Image damageImage;
     bool damaged;
-    public bool isDead { get; set; }
+    public static bool isDead;
 
     Transform cameraTransform;
     private float cameraRotation;
@@ -62,6 +62,11 @@ public class Player : Character
         cameraRotation -= Input.GetAxisRaw("Mouse Y") * rotationSpeed * Time.deltaTime;
         cameraRotation = Mathf.Clamp(cameraRotation, minimumY, maximumY);
         cameraTransform.localEulerAngles = new Vector3(cameraRotation, cameraTransform.localEulerAngles.y, 0);
+    }
+
+    public override void Attac()
+    {
+        
     }
 
     public void DamagedEffect()

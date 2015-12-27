@@ -45,7 +45,7 @@ public class LevelManager : MonoBehaviour
         alpha = Mathf.Clamp01(alpha);
         loadingImage.color = new Color(loadingImage.color.r, loadingImage.color.g, loadingImage.color.b, alpha);
 
-        if (Input.anyKeyDown)
+        if (async != null && Input.anyKeyDown)
             async.allowSceneActivation = true;
     }
 
@@ -59,6 +59,19 @@ public class LevelManager : MonoBehaviour
     public void Loadlevel(string levelName)
     {
         Application.LoadLevel(levelName);
+    }
+
+    public void LoadLevelFromGame(string levelName)
+    {
+        Application.LoadLevel(levelName);
+        StartCoroutine(LoadMenuFromGame());
+    }
+
+    IEnumerator LoadMenuFromGame()
+    {
+        yield return new WaitForSeconds(0);
+        StartCoroutine(MenuController.menuController.NextMenu());
+        
     }
 
     public void LoadLevelAsync(string levelName, float loadingDuration)
@@ -85,7 +98,7 @@ public class LevelManager : MonoBehaviour
     public IEnumerator LoadLevelWithFade(LoadLevelWP level, string levelName)
     {
         BeginFade(1);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(FadeSpeed);
         level(levelName, 2.3f);
     }
 

@@ -18,6 +18,9 @@ public class PlayerScript : MonoBehaviour
     public Slider CastBar;
     public Image DamageImage;
 
+    [HideInInspector]
+    public Animator anim;
+
     public Player player;
 
     public List<GameObject> RRune = new List<GameObject>();
@@ -41,6 +44,8 @@ public class PlayerScript : MonoBehaviour
 
         Player.damageImage = DamageImage;
         Player.playerHPSlider = HpSlider;
+
+        anim = GetComponent<Animator>();
 
         player = new Player(Spells, CharactersDB.characterDB.HP, CharactersDB.characterDB.HPRegen, CharactersDB.characterDB.MoveSpeed);
     }
@@ -119,6 +124,15 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
+    void Attac()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            Spells[NumOfActiveSpell].RemoveSpellPointsBase();
+            SpellSDataBase.Attac.Attac(SpellSpawnPos, SpellSpawnPos);
+        }
+    }
+
     void SpellCast()
     {
         if (Spells.Count > 0 && Spells[NumOfActiveSpell].SpellName1 != null)
@@ -137,17 +151,25 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
-        SpellChange();
+        if (!CharacterUIController.paused)
+        {
+            Attac();
 
-        SpellCast();
+            SpellCast();
 
-        if (Spells.Count > 0)
-            CharacterUIController.SetText(Spells[NumOfActiveSpell].SpellName1, Color.red, Spells[NumOfActiveSpell].SpellImage1);
+            SpellChange();
 
-        player.Turning();
-        player.DamagedEffect();
+            if (Spells.Count > 0)
+                CharacterUIController.SetSpellInfo(Spells[NumOfActiveSpell].SpellName1, Color.red, Spells[NumOfActiveSpell].SpellImage1);
 
-        enabled = !player.isDead;
+            player.Turning();
+            player.DamagedEffect();
+
+            enabled = !Player.isDead;
+        }
+
+        if (Player.isDead)
+            CharacterUIController.SetText("Поражение", Color.red);
     }
 
     bool GodMode = false;
@@ -159,7 +181,7 @@ public class PlayerScript : MonoBehaviour
             if (!GodMode)
             {
                 Spells = SpellSDataBase.Spells;
-                CharacterUIController.SetTextTrigger("Режим БОГА", Color.red);
+                CharacterUIController.SetTextTrigger("Режим Админа", Color.red);
                 GodMode = true;
             }
             else
@@ -167,7 +189,7 @@ public class PlayerScript : MonoBehaviour
                 Spells = GameController.PlayerSpells;
                 ScriptResourceRune.maxCoolDown = 10;
                 NumOfActiveSpell = 0;
-                CharacterUIController.SetTextTrigger("Режим не БОГА", Color.red);
+                CharacterUIController.SetTextTrigger("Режим не Админа", Color.red);
                 GodMode = false;
             }
         }

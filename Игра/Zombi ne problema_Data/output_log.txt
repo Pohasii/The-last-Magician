@@ -1,0 +1,370 @@
+Initialize engine version: 5.1.1f1 (2046fc06d4d8)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 10.0]
+    Renderer: Mobile Intel(R) 4 Series Express Chipset Family (ID=0x2a42)
+    Vendor:   Intel
+    VRAM:     128 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Users\FONTOoMas\OneDrive\Документы\The-last-Magician\Игра\Zombi ne problema_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\FONTOoMas\OneDrive\Документы\The-last-Magician\Игра\Zombi ne problema_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\FONTOoMas\OneDrive\Документы\The-last-Magician\Игра\Zombi ne problema_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading C:\Users\FONTOoMas\OneDrive\Документы\The-last-Magician\Игра\Zombi ne problema_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
+Platform assembly: C:\Users\FONTOoMas\OneDrive\Документы\The-last-Magician\Игра\Zombi ne problema_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\FONTOoMas\OneDrive\Документы\The-last-Magician\Игра\Zombi ne problema_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\FONTOoMas\OneDrive\Документы\The-last-Magician\Игра\Zombi ne problema_Data\Managed\Assembly-UnityScript.dll (this message is harmless)
+Loading C:\Users\FONTOoMas\OneDrive\Документы\The-last-Magician\Игра\Zombi ne problema_Data\Managed\Assembly-UnityScript.dll into Unity Child Domain
+Platform assembly: C:\Users\FONTOoMas\OneDrive\Документы\The-last-Magician\Игра\Zombi ne problema_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\FONTOoMas\OneDrive\Документы\The-last-Magician\Игра\Zombi ne problema_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Users\FONTOoMas\OneDrive\Документы\The-last-Magician\Игра\Zombi ne problema_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\Users\FONTOoMas\OneDrive\Документы\The-last-Magician\Игра\Zombi ne problema_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: C:\Users\FONTOoMas\OneDrive\Документы\The-last-Magician\Игра\Zombi ne problema_Data\Managed\UnityEngine.Analytics.dll (this message is harmless)
+Loading C:\Users\FONTOoMas\OneDrive\Документы\The-last-Magician\Игра\Zombi ne problema_Data\Managed\UnityEngine.Analytics.dll into Unity Child Domain
+- Completed reload, in  0.112 seconds
+desktop: 1366x768 59Hz; virtual: 1366x768 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+Platform assembly: C:\Users\FONTOoMas\OneDrive\Документы\The-last-Magician\Игра\Zombi ne problema_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Users\FONTOoMas\OneDrive\Документы\The-last-Magician\Игра\Zombi ne problema_Data\Managed\System.dll (this message is harmless)
+Setting up 1 worker threads for Enlighten.
+  Thread -> id: 1c0 -> priority: 1 
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.631081 ms
+
+Unloading 4 unused Assets to reduce memory usage. Loaded Objects now: 686.
+Total: 0.857899 ms (FindLiveObjects: 0.103143 ms CreateObjectMapping: 0.078701 ms MarkObjects: 0.640858 ms  DeleteObjects: 0.026885 ms)
+
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 4.600397 ms
+Setting up 1 worker threads for Enlighten.
+  Thread -> id: efc -> priority: 1 
+
+Unloading 16 unused Assets to reduce memory usage. Loaded Objects now: 1708.
+Total: 1.844362 ms (FindLiveObjects: 0.241482 ms CreateObjectMapping: 0.170113 ms MarkObjects: 1.248476 ms  DeleteObjects: 0.175979 ms)
+
+Platform assembly: C:\Users\FONTOoMas\OneDrive\Документы\The-last-Magician\Игра\Zombi ne problema_Data\Managed\Boo.Lang.dll (this message is harmless)
+NullReferenceException: Object reference not set to an instance of an object
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+ArgumentOutOfRangeException: Argument is out of range.
+Parameter name: index
+  at System.Collections.Generic.List`1[SpellPoints].get_Item (Int32 index) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+ArgumentOutOfRangeException: Argument is out of range.
+Parameter name: index
+  at System.Collections.Generic.List`1[SpellPoints].get_Item (Int32 index) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+ArgumentOutOfRangeException: Argument is out of range.
+Parameter name: index
+  at System.Collections.Generic.List`1[SpellPoints].get_Item (Int32 index) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+ArgumentOutOfRangeException: Argument is out of range.
+Parameter name: index
+  at System.Collections.Generic.List`1[SpellPoints].get_Item (Int32 index) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+ArgumentOutOfRangeException: Argument is out of range.
+Parameter name: index
+  at System.Collections.Generic.List`1[SpellPoints].get_Item (Int32 index) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+ArgumentOutOfRangeException: Argument is out of range.
+Parameter name: index
+  at System.Collections.Generic.List`1[SpellPoints].get_Item (Int32 index) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+ArgumentOutOfRangeException: Argument is out of range.
+Parameter name: index
+  at System.Collections.Generic.List`1[SpellPoints].get_Item (Int32 index) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+ArgumentOutOfRangeException: Argument is out of range.
+Parameter name: index
+  at System.Collections.Generic.List`1[SpellPoints].get_Item (Int32 index) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastBase (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCastInvoke (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at Spell.CastSpellWithPoint (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at SWOP.SpellCast (UnityEngine.Transform SpawnPos, UnityEngine.Transform cameraTransform) [0x00000] in <filename unknown>:0 
+  at PlayerScript.SpellCast () [0x00000] in <filename unknown>:0 
+  at PlayerScript.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+

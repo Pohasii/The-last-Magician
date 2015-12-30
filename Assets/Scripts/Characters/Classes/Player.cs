@@ -16,7 +16,7 @@ public class Player : Character
 
     public static Image damageImage;
     bool damaged;
-    public static bool isDead;
+    public bool isDead { get { return CurHP <= 0; } }
 
     Transform cameraTransform;
     private float cameraRotation;
@@ -31,7 +31,6 @@ public class Player : Character
     public Player(List<Spell> p_Spells, float p_HP, float p_HPRegen, float p_MoveSpeed)
         : base(0, p_HP, p_HPRegen, p_MoveSpeed)
     {
-        isDead = false;
         damaged = false;
 
         Seplls = p_Spells;
@@ -90,7 +89,7 @@ public class Player : Character
 
         if (CurHP <= 0 && !isDead)
         {
-            isDead = true;
+
         }
     }
 

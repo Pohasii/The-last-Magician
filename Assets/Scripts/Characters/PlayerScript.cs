@@ -151,24 +151,24 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
-        if (!CharacterUIController.paused)
-        {
-            Attac();
+        if (CharacterUIController.paused)
+            return;
 
-            SpellCast();
+        Attac();
 
-            SpellChange();
+        SpellCast();
 
-            if (Spells.Count > 0)
-                CharacterUIController.SetSpellInfo(Spells[NumOfActiveSpell].SpellName1, Color.red, Spells[NumOfActiveSpell].SpellImage1);
+        SpellChange();
 
-            player.Turning();
-            player.DamagedEffect();
+        if (Spells.Count > 0)
+            CharacterUIController.SetSpellInfo(Spells[NumOfActiveSpell].SpellName1, Color.red, Spells[NumOfActiveSpell].SpellImage1);
 
-            enabled = !Player.isDead;
-        }
+        player.Turning();
+        player.DamagedEffect();
 
-        if (Player.isDead)
+        enabled = !PlayerScript.playerScript.player.isDead;
+
+        if (PlayerScript.playerScript.player.isDead)
             CharacterUIController.SetText("Поражение", Color.red);
     }
 
@@ -176,7 +176,7 @@ public class PlayerScript : MonoBehaviour
     public static KeyCode GodModeSwitch = KeyCode.T;
     void SpellChange()
     {
-        if(Input.GetKeyDown(GodModeSwitch))
+        if (Input.GetKeyDown(GodModeSwitch))
         {
             if (!GodMode)
             {
@@ -227,7 +227,7 @@ public class PlayerScript : MonoBehaviour
     void OnEnable()
     {
         //if (Spells.Count > 0)
-            //OnPlayerMove += Spells[NumOfActiveSpell].StopCast;
+        //OnPlayerMove += Spells[NumOfActiveSpell].StopCast;
     }
     void OnDisable()
     {

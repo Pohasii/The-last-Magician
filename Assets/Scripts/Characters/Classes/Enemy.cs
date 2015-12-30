@@ -53,7 +53,7 @@ public class Enemy : Character
 
     public void Move(Transform myTransform)
     {
-        if (!Player.isDead)
+        if (!PlayerScript.playerScript.player.isDead)
             EnemyNav.SetDestination(Target.position);
         else
             EnemyNav.Stop();
@@ -79,18 +79,18 @@ public class Enemy : Character
     public void AttacTrigger()
     {
         timer += Time.deltaTime;
-        if (timer >= EnemyAttacDelay && playerInRange && !Player.isDead)
+        if (timer >= EnemyAttacDelay && playerInRange && !PlayerScript.playerScript.player.isDead)
         {
             Attac();
         }
-        if (Player.isDead)
+        if (PlayerScript.playerScript.player.isDead)
             anim.SetBool("Attac", false);
     }
 
     public override void Attac()
     {
         timer = 0f;
-        if (!Player.isDead)
+        if (!PlayerScript.playerScript.player.isDead)
         {
             PlayerScript.playerScript.player.TakeDamageBase(Damage);
         }

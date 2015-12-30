@@ -4,14 +4,12 @@ using System.Collections;
 public class VoidZoneSpellBehaviour : MonoBehaviour
 {
     public Spell spell;
-    Transform myTransform;
     Collider myCollider;
     ParticleSystem PS;
     AudioSource AS;
 
     void Start()
     {
-        myTransform = GetComponent<Transform>();
         Destroy(gameObject, spell.SpellLifeTime1);
     }
 

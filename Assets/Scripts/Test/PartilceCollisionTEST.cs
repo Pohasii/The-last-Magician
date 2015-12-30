@@ -3,11 +3,11 @@ using System.Collections;
 
 public class PartilceCollisionTEST : MonoBehaviour
 {
-    SphereCollider coll;
+
 
     void Start()
     {
-        coll = GetComponent<SphereCollider>();
+
     }
 
     void Update()

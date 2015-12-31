@@ -128,7 +128,9 @@ public class PlayerScript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            if(Spells.Count > 0)
             Spells[NumOfActiveSpell].RemoveSpellPointsBase();
+
             SpellSDataBase.Attac.Attac(SpellSpawnPos, SpellSpawnPos);
         }
     }
@@ -163,6 +165,7 @@ public class PlayerScript : MonoBehaviour
         if (Spells.Count > 0)
             CharacterUIController.SetSpellInfo(Spells[NumOfActiveSpell].SpellName1, Color.red, Spells[NumOfActiveSpell].SpellImage1);
 
+        player.HPRegen();
         player.Turning();
         player.DamagedEffect();
 

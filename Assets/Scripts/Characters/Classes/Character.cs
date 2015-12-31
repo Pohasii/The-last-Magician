@@ -2,12 +2,26 @@
 using UnityEngine.UI;
 using System.Collections;
 
+[System.Serializable]
 public class Character
 {
     public float Damage { get; set; }
     protected float MaxHP;
-    public float CurHP{get;set;}
-    public float HPRegen { get; set; }
+    [SerializeField]
+    private float CurHP;
+
+    public float CurHP1
+    {
+        get { return CurHP; }
+        set { if (value > MaxHP) value = MaxHP; CurHP = value; hpSlider.value = CurHP; }
+    }
+    private float HpRegen;
+
+    public float HpRegen1
+    {
+        get { return HpRegen * Time.deltaTime; }
+        set { HpRegen = value; }
+    }
     public float MoveSpeed { get; set; }
 
     protected Slider hpSlider;
@@ -17,7 +31,7 @@ public class Character
         Damage = p_Dmg;
         MaxHP = p_MaxHP;
         CurHP = p_MaxHP;
-        HPRegen = p_HPRegen;
+        HpRegen = p_HPRegen;
         MoveSpeed = p_MoveSpeed;
     }
 
@@ -28,8 +42,13 @@ public class Character
 
     public virtual void TakeDamage(HZSpell SpellInfo)
     {
-        CurHP -= SpellInfo.SpellDamage1;
+        CurHP1 -= SpellInfo.SpellDamage1;
         if(hpSlider)
-        hpSlider.value = CurHP;
+        hpSlider.value = CurHP1;
+    }
+
+    public virtual void HPRegen()
+    {
+        CurHP1 += HpRegen1;
     }
 }

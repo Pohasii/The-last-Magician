@@ -42,7 +42,7 @@ public class Enemy : Character
 
         hpSlider = p_Canvas.transform.GetChild(0).GetComponent<Slider>();
         hpSlider.maxValue = MaxHP;
-        hpSlider.value = CurHP;
+        hpSlider.value = CurHP1;
 
         Target = PlayerScript.playerScript.GetComponent<Transform>();
         EnemyNav = nav;
@@ -61,7 +61,7 @@ public class Enemy : Character
 
     public void Dead(Transform myTransform, string p_name)
     {
-        if (CurHP <= 0)
+        if (CurHP1 <= 0)
         {
             if (!IsDead)
             {

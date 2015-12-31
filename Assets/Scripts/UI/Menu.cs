@@ -107,8 +107,9 @@ public class Menu : MonoBehaviour
         }
     }
 
-    public void SlotForSpellsCreate()
+    public void CreateSlotForSpells()
     {
+        SpellInSlot.Add(new Spell());
         if (SpellInSlot[0].SpellName1 == null)
             return;
         GameObject slot = Instantiate(SlotForSpells);
@@ -117,7 +118,6 @@ public class Menu : MonoBehaviour
         slot.GetComponent<RectTransform>().localPosition = SlotForSpells.GetComponent<RectTransform>().localPosition + Vector3.right * SlotForSpells.GetComponent<RectTransform>().localScale.x * SlotsForSpells.Count;
         slot.GetComponent<Slot>().CurSlot = SlotsForSpells.Count;
         SlotsForSpells.Add(slot);
-        SpellInSlot.Add(new Spell());
         SpellsObjInSlot.Add(null);
         if (SpellInSlot.Count < 1)
             return;
@@ -126,7 +126,7 @@ public class Menu : MonoBehaviour
 
     public void CreateSpell(Spell CreatedSpell)
     {
-        SlotForSpellsCreate();
+        CreateSlotForSpells();
         for (int i = 0; i < SpellInSlot.Count; i++)
         {
             if (SpellInSlot[i].SpellName1 == null)

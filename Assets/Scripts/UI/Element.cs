@@ -74,5 +74,6 @@ public class Element
     {
         Name = p_Name;
         Description = p_Description;
+        Sprite = Resources.Load<Sprite>("ElementsImage/" + p_Name);
     }
 }

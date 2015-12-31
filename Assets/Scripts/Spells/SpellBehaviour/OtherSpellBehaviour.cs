@@ -21,6 +21,7 @@ public class OtherSpellBehaviour : MonoBehaviour
 
     void OtherSpell(Collider col)
     {
+        Destroy(gameObject.transform.GetChild(1).gameObject);
         myCollider.enabled = false;
         AS.Play();
         PS.Play();

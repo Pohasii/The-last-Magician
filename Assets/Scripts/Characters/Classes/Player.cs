@@ -16,7 +16,7 @@ public class Player : Character
 
     public static Image damageImage;
     bool damaged;
-    public bool isDead { get { return CurHP <= 0; } }
+    public bool isDead { get { return CurHP1 <= 0; } }
 
     Transform cameraTransform;
     private float cameraRotation;
@@ -84,13 +84,8 @@ public class Player : Character
     public void TakeDamageBase(float Damage)
     {
         damaged = true;
-        CurHP -= Damage;
-        hpSlider.value = CurHP;
-
-        if (CurHP <= 0 && !isDead)
-        {
-
-        }
+        CurHP1 -= Damage;
+        hpSlider.value = CurHP1;
     }
 
     public override void TakeDamage(HZSpell SpellInfo)

@@ -12,6 +12,7 @@ public class CharacterUIController : MonoBehaviour
     static Animator animator;
     static Text TextBar1, TextBar2;
     static Image spellImage;
+
     public GameObject InGameMenu;//Меню паузы
     public GameObject HelpWindow;//Помощь
 

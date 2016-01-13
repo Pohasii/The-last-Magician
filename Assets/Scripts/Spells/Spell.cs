@@ -117,7 +117,7 @@ public class Spell
             }
             else
             {
-                CharacterUIController.SetTextTrigger("Not enough runes", Color.red);
+                CharacterUIController.SetTextTrigger("Not enough runes", Color.red, 25);
             }
         }
         SpellCastInvoke(SpawnPos, cameraTransform);
@@ -242,6 +242,7 @@ public class HZSpell : Spell
     }
 }
 
+[System.Serializable]
 public class SWNP : HZSpell
 {
     public SWNP(string p_Name, string p_Description, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
@@ -277,7 +278,7 @@ public class SWNP : HZSpell
             if (playerScript.CheckRuneCD(this))
                 isCast = true;
             else
-                CharacterUIController.SetTextTrigger("Not enough runes", Color.red);
+                CharacterUIController.SetTextTrigger("Not enough runes", Color.red, 25);
         }
         base.SpellCastInvoke(SpawnPos, cameraTransform);
     }
@@ -290,6 +291,7 @@ public class SWNP : HZSpell
     }
 }
 
+[System.Serializable]
 public class SWOP : HZSpell
 {
     public SWOP(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
@@ -328,6 +330,7 @@ public class SWOP : HZSpell
     }
 }
 
+[System.Serializable]
 public class SWTP : HZSpell
 {
     public SWTP(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
@@ -395,7 +398,7 @@ public class MovementSpell : Spell
             if (playerScript.CheckRuneCD(this))
                 isCast = true;
             else
-                CharacterUIController.SetTextTrigger("Not enough runes", Color.red);
+                CharacterUIController.SetTextTrigger("Not enough runes", Color.red, 25);
         base.SpellCastInvoke(SpawnPos, cameraTransform);
     }
 

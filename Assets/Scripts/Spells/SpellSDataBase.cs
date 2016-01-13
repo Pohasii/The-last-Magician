@@ -96,7 +96,7 @@ public class SpellSDataBase : MonoBehaviour
 
         Attac = new SWNP("Attac", "Base Attac", 5f, 0f, 0.3f, HZSpell.SpellDamageTypes.Fire);
 
-        Spells.Add(new SWNP("FireBall", "over 9000 Damage", FireBallElements, 25f, 0f, 2f, HZSpell.SpellDamageTypes.Fire));
+        Spells.Add(new SWNP("FireBall", "over 9000 PlayerDamage", FireBallElements, 25f, 0f, 2f, HZSpell.SpellDamageTypes.Fire));
         //Spells.Add(new DamageSpell("FrostBolt", "Slow", pointObj, FrostBoltElements, 1f, 1f, 2f, DamageSpell.SpellDamageTypes.Frost));
         Spells.Add(new SWOP("Fire area", "Pian", pointObj, FireAreaElements, 10f * Time.deltaTime, 0f, 20f, HZSpell.SpellDamageTypes.Fire));
         Spells.Add(new SWOP("Bomb", "BOOM", pointObj, BombElements, 7, 2000, 35, 0.5f, 10, HZSpell.SpellDamageTypes.Fire));

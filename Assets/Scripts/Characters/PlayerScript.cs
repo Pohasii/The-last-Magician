@@ -47,7 +47,7 @@ public class PlayerScript : MonoBehaviour
 
         anim = GetComponent<Animator>();
 
-        player = new Player(Spells, CharactersDB.characterDB.HP, CharactersDB.characterDB.HPRegen, CharactersDB.characterDB.MoveSpeed);
+        player = new Player(CharactersDB.characterDB.PlayerHP, CharactersDB.characterDB.PlayerHPRegen, CharactersDB.characterDB.PlayerMoveSpeed);
     }
 
     public bool CheckRuneCD(Spell spell)
@@ -172,11 +172,12 @@ public class PlayerScript : MonoBehaviour
         enabled = !PlayerScript.playerScript.player.isDead;
 
         if (PlayerScript.playerScript.player.isDead)
-            CharacterUIController.SetText("Поражение", Color.red);
+            CharacterUIController.SetText("Поражение", Color.red, 25);
     }
 
     bool GodMode = false;
     public static KeyCode GodModeSwitch = KeyCode.T;
+
     void SpellChange()
     {
         if (Input.GetKeyDown(GodModeSwitch))
@@ -184,7 +185,7 @@ public class PlayerScript : MonoBehaviour
             if (!GodMode)
             {
                 Spells = SpellSDataBase.Spells;
-                CharacterUIController.SetTextTrigger("Режим Админа", Color.red);
+                CharacterUIController.SetTextTrigger("Режим Админа", Color.red, 25);
                 GodMode = true;
             }
             else
@@ -192,7 +193,7 @@ public class PlayerScript : MonoBehaviour
                 Spells = GameController.PlayerSpells;
                 ScriptResourceRune.maxCoolDown = 10;
                 NumOfActiveSpell = 0;
-                CharacterUIController.SetTextTrigger("Режим не Админа", Color.red);
+                CharacterUIController.SetTextTrigger("Режим не Админа", Color.red, 25);
                 GodMode = false;
             }
         }
@@ -225,16 +226,5 @@ public class PlayerScript : MonoBehaviour
                 OnPlayerMove();
         }
         player.Move(h, v);
-    }
-
-    void OnEnable()
-    {
-        //if (Spells.Count > 0)
-        //OnPlayerMove += Spells[NumOfActiveSpell].StopCast;
-    }
-    void OnDisable()
-    {
-        //if (Spells.Count > 0)
-        //    OnPlayerMove -= Spells[NumOfActiveSpell].StopCast;
     }
 }

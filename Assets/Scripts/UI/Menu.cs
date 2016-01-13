@@ -6,8 +6,8 @@ using System.Collections.Generic;
 public class Menu : MonoBehaviour
 {
     public static Menu SMenu;
-    [SerializeField]
-    private GameObject BackGround, SlotForSpells;//задний фон и префаб слота для спелов
+
+    public GameObject BackGround, SlotForSpells;//задний фон и префаб слота для спелов
 
     public List<Spell> SpellInSlot = new List<Spell>();//спелы в слоте
     public List<GameObject> SlotsForSpells = new List<GameObject>();//слоты для спелов

@@ -5,11 +5,9 @@ using System.Collections;
 [System.Serializable]
 public class Enemy : Character
 {
-    NavMeshAgent EnemyNav;
+    public Animator anim;
+    public NavMeshAgent EnemyNav;
     Transform Target;
-
-    float EnemyMP;
-    float EnemyMPRegen;
 
     bool playerInRange;
     public bool PlayerInRange
@@ -28,30 +26,25 @@ public class Enemy : Character
         set { isDead = value; }
     }
 
-    Animator anim;
-
-    public static GameObject ScoreRune;
-
-    public Enemy(Animator p_anim, NavMeshAgent nav, Canvas p_Canvas, float p_Damage, float p_AttacDelay, float p_HP, float p_MP, float p_HPRegen, float p_MPRegen)
-        : base(p_Damage, p_HP, p_HPRegen, 5)
+    public Enemy(Transform p_Transform, float p_Damage, float p_AttacDelay, float p_HP, float p_MoveSpeed)
+        : base(p_Damage, p_HP, p_MoveSpeed)
     {
-        EnemyAttacDelay = p_AttacDelay;
-        EnemyMP = p_MP;
+        anim = p_Transform.GetComponent<Animator>();
+        EnemyNav = p_Transform.GetComponent<NavMeshAgent>();
 
-        EnemyMPRegen = p_MPRegen;
-
-        hpSlider = p_Canvas.transform.GetChild(0).GetComponent<Slider>();
+        hpSlider = p_Transform.GetChild(0).GetComponentInChildren<Slider>();
         hpSlider.maxValue = MaxHP;
         hpSlider.value = CurHP1;
 
         Target = PlayerScript.playerScript.GetComponent<Transform>();
-        EnemyNav = nav;
-        anim = p_anim;
+
+        EnemyAttacDelay = p_AttacDelay;
+        EnemyNav.speed = p_MoveSpeed;
 
         isDead = false;
     }
 
-    public void Move(Transform myTransform)
+    public void Move()
     {
         if (!PlayerScript.playerScript.player.isDead)
             EnemyNav.SetDestination(Target.position);
@@ -59,19 +52,13 @@ public class Enemy : Character
             EnemyNav.Stop();
     }
 
-    public void Dead(Transform myTransform, string p_name)
+    public void Dead(Transform myTransform)
     {
         if (CurHP1 <= 0)
         {
             if (!IsDead)
             {
-                GameObject.Instantiate(ScoreRune, myTransform.position + Vector3.up, Quaternion.identity);
-                GameController.RespNewEnemy(p_name);
-                anim.SetTrigger("Dead");
                 myTransform.GetComponent<EnemyScript>().DisableComponents();
-                hpSlider.gameObject.SetActive(false);
-                GameObject.Destroy(myTransform.gameObject, 3);
-                IsDead = true;
             }
         }
     }
@@ -83,8 +70,6 @@ public class Enemy : Character
         {
             Attac();
         }
-        if (PlayerScript.playerScript.player.isDead)
-            anim.SetBool("Attac", false);
     }
 
     public override void Attac()
@@ -93,6 +78,7 @@ public class Enemy : Character
         if (!PlayerScript.playerScript.player.isDead)
         {
             PlayerScript.playerScript.player.TakeDamageBase(Damage);
+            anim.Play("attack");
         }
     }
 }

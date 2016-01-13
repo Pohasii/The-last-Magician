@@ -26,21 +26,16 @@ public class Player : Character
 
     public static Slider playerHPSlider;
 
-    public List<Spell> Seplls;
-
-    public Player(List<Spell> p_Spells, float p_HP, float p_HPRegen, float p_MoveSpeed)
+    public Player(float p_HP, float p_HPRegen, float p_MoveSpeed)
         : base(0, p_HP, p_HPRegen, p_MoveSpeed)
     {
         damaged = false;
-
-        Seplls = p_Spells;
 
         myTransform = PlayerScript.myTransform;
         myRigidbody = PlayerScript.myRigidBody;
 
         hpSlider = playerHPSlider;
-        hpSlider.maxValue = MaxHP;
-        hpSlider.value = MaxHP;
+        MaxHPSet = MaxHP;
 
         cameraTransform = myTransform.GetChild(0);//Camera.main.transform;
     }

@@ -32,8 +32,7 @@ public class PlayerScript : MonoBehaviour
 
     void Awake()
     {
-        playerScript = this;
-        Spell.playerScript = GetComponent<PlayerScript>();
+        playerScript = Spell.playerScript = this;
 
         myTransform = GetComponent<Transform>();
         myRigidBody = GetComponent<Rigidbody>();
@@ -42,12 +41,14 @@ public class PlayerScript : MonoBehaviour
         Spells = GameController.PlayerSpells;
         //Spells = SpellSDataBase.Spells;
 
-        Player.damageImage = DamageImage;
-        Player.playerHPSlider = HpSlider;
-
         anim = GetComponent<Animator>();
 
-        player = new Player(CharactersDB.characterDB.PlayerHP, CharactersDB.characterDB.PlayerHPRegen, CharactersDB.characterDB.PlayerMoveSpeed);
+        player = new Player(CharactersDB.characterDB.PlayerHP, CharactersDB.characterDB.PlayerHPRegen, CharactersDB.characterDB.PlayerArmor, CharactersDB.characterDB.PlayerMoveSpeed, CharactersDB.characterDB.PlayerMagResist);
+    }
+
+    void Start()
+    {
+        CharactersDB.characterDB.Load();
     }
 
     public bool CheckRuneCD(Spell spell)

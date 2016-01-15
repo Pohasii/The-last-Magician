@@ -14,6 +14,8 @@ public class MenuController : MonoBehaviour
     public GameObject HelpWindow;//Помощь
     public static List<Animator> PopUpMenuAnimList = new List<Animator>();//анимация всплывающего меню
 
+
+
     void Awake()
     {
         PopUpMenuAnimList.Clear();

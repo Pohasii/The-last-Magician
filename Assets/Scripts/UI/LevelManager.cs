@@ -7,7 +7,7 @@ public class LevelManager : MonoBehaviour
     public static LevelManager levelManager;
 
     [HideInInspector]
-    public float FadeSpeed;//скорость затухания
+    public float FadeSpeed = 1f;//скорость затухания
     float alpha = 1f;//значение непрозрачности тестуры затухания
     float fadeDirection = -1;//направление затухания
 
@@ -29,7 +29,6 @@ public class LevelManager : MonoBehaviour
             {
                 Destroy(gameObject);
             }
-        FadeSpeed = 1f;
     }
 
     void Start()

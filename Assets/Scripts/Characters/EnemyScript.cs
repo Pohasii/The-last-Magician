@@ -21,34 +21,32 @@ public class EnemyScript : MonoBehaviour
 
     void Update()
     {
-        if (!enemy.IsDead)
+        if (enemy.IsDead)
+            return;
+
+        enemy.Move();
+        enemy.AttacTrigger();
+
+        EnemyDeath();
+    }
+
+    void EnemyDeath()
+    {
+        if (enemy.CurHP1 <= 0 && !enemy.IsDead)
         {
-            enemy.Move();
-            enemy.AttacTrigger();
+            myRigidbody.isKinematic = true;
+            myCollider.enabled = false;
+
+            Instantiate(GameController.controller.ScoreRuneObj, myTransform.position + Vector3.up, Quaternion.identity);
+            EnemySpawn.enemySpawn.RespNewEnemy(name);
+
+            enemy.IsDead = true;
+            enemy.anim.SetTrigger("Dead");
+            enemy.EnemyNav.enabled = false;
+            enemy.hpSlider.gameObject.SetActive(false);
+
+            Destroy(gameObject, 3);
         }
-
-        enemy.Dead(myTransform);
-    }
-
-    void StateByWave()
-    {
-
-    }
-
-    public void DisableComponents()
-    {
-        myRigidbody.isKinematic = true;
-        myCollider.enabled = false;
-
-        Instantiate(GameController.controller.ScoreRuneObj, myTransform.position + Vector3.up, Quaternion.identity);
-        EnemySpawn.enemySpawn.RespNewEnemy(name);
-
-        enemy.IsDead = true;
-        enemy.anim.SetTrigger("Dead");
-        enemy.EnemyNav.enabled = false;
-        enemy.hpSlider.gameObject.SetActive(false);
-
-        Destroy(gameObject, 3);
     }
 
     void OnTriggerEnter(Collider col)

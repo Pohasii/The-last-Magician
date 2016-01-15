@@ -9,9 +9,9 @@ public class Menu : MonoBehaviour
 
     public GameObject BackGround, SlotForSpells;//задний фон и префаб слота для спелов
 
-    public List<Spell> SpellInSlot = new List<Spell>();//спелы в слоте
-    public List<GameObject> SlotsForSpells = new List<GameObject>();//слоты для спелов
-    public List<GameObject> SpellsObjInSlot = new List<GameObject>();//объекты спелов в слоте
+    public static List<Spell> SpellInSlot = new List<Spell>();//спелы в слоте
+    public static List<GameObject> SlotsForSpells = new List<GameObject>();//слоты для спелов
+    public static List<GameObject> SpellsObjInSlot = new List<GameObject>();//объекты спелов в слоте
 
     public List<Element> ElementsInSlots = new List<Element>();//елементы в слоте
     public List<GameObject> SlotsForElements = new List<GameObject>();//слоты для елементов
@@ -37,6 +37,7 @@ public class Menu : MonoBehaviour
     void Awake()
     {
         SMenu = this;
+        Debug.Log(SpellsObjInSlot.Count);
     }
 
     void Start()
@@ -110,8 +111,8 @@ public class Menu : MonoBehaviour
     public void CreateSlotForSpells()
     {
         SpellInSlot.Add(new Spell());
-        if (SpellInSlot[0].SpellName1 == null)
-            return;
+        //if (SpellInSlot[0].SpellName1 == null)
+        //    return;
         GameObject slot = Instantiate(SlotForSpells);
         slot.transform.SetParent(SlotForSpells.transform.parent);
         slot.GetComponent<RectTransform>().localScale = SlotForSpells.transform.localScale;

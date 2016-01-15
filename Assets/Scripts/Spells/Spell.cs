@@ -197,8 +197,7 @@ public class HZSpell : Spell
         set { SpellDamage = value; }
     }
 
-    SpellDamageTypes SpellDamageType;
-    public enum SpellDamageTypes { Fire, Frost }
+    public SpellDamageType SpellDamageType;
 
     GameObject SpellObj;//префаб скила
     public GameObject SpellObj1
@@ -207,7 +206,7 @@ public class HZSpell : Spell
         set { SpellObj = value; }
     }
 
-    public HZSpell(string p_Name, string p_Description, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
+    public HZSpell(string p_Name, string p_Description, float Damage, float CastTime, float p_LifeTime, SpellDamageType DamageType)
         : base(p_Name, p_Description, CastTime, p_LifeTime)
     {
         SpellDamage = Damage;
@@ -216,7 +215,7 @@ public class HZSpell : Spell
         SpellObj = Resources.Load<GameObject>("SpellsPrefab/" + p_Name);
     }
 
-    public HZSpell(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
+    public HZSpell(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageType DamageType)
         : base(p_Name, p_Description, Components, CastTime, p_LifeTime)
     {
         PointObj = pointObj;
@@ -226,7 +225,7 @@ public class HZSpell : Spell
         SpellObj = Resources.Load<GameObject>("SpellsPrefab/" + p_Name);
     }
 
-    public HZSpell(string p_Name, string p_Description, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
+    public HZSpell(string p_Name, string p_Description, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageType DamageType)
         : base(p_Name, p_Description, Components, CastTime, p_LifeTime)
     {
         SpellDamage = Damage;
@@ -245,13 +244,13 @@ public class HZSpell : Spell
 [System.Serializable]
 public class SWNP : HZSpell
 {
-    public SWNP(string p_Name, string p_Description, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
+    public SWNP(string p_Name, string p_Description, float Damage, float CastTime, float p_LifeTime, SpellDamageType DamageType)
         : base(p_Name, p_Description, Damage, CastTime, p_LifeTime, DamageType)
     {
 
     }
 
-    public SWNP(string p_Name, string p_Description, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
+    public SWNP(string p_Name, string p_Description, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageType DamageType)
         : base(p_Name, p_Description, Components, Damage, CastTime, p_LifeTime, DamageType)
     {
     }
@@ -291,15 +290,17 @@ public class SWNP : HZSpell
     }
 }
 
+public enum SpellDamageType { Fire, Frost, Arcane, Shadow, Nature, Holy }
+
 [System.Serializable]
 public class SWOP : HZSpell
 {
-    public SWOP(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
+    public SWOP(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageType DamageType)
         : base(p_Name, p_Description, pointObj, Components, Damage, CastTime, p_LifeTime, DamageType)
     {
     }
 
-    public SWOP(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float p_Radius, float p_ExpForce, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
+    public SWOP(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float p_Radius, float p_ExpForce, float Damage, float CastTime, float p_LifeTime, SpellDamageType DamageType)
         : this(p_Name, p_Description, pointObj, Components, Damage, CastTime, p_LifeTime, DamageType)
     {
         ExplosionForce1 = p_ExpForce;
@@ -333,7 +334,7 @@ public class SWOP : HZSpell
 [System.Serializable]
 public class SWTP : HZSpell
 {
-    public SWTP(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageTypes DamageType)
+    public SWTP(string p_Name, string p_Description, GameObject pointObj, List<Element> Components, float Damage, float CastTime, float p_LifeTime, SpellDamageType DamageType)
         : base(p_Name, p_Description, pointObj, Components, Damage, CastTime, p_LifeTime, DamageType)
     {
 

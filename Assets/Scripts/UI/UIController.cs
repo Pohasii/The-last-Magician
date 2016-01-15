@@ -44,8 +44,8 @@ public class UIController : MonoBehaviour
 
                     SpellScript tempSpellScript = DraggingObj.GetComponent<SpellScript>();
 
-                    menu.SpellInSlot[tempSpellScript.inSlot] = new Spell();
-                    menu.SpellsObjInSlot[tempSpellScript.inSlot] = null;
+                    Menu.SpellInSlot[tempSpellScript.inSlot] = new Spell();
+                    Menu.SpellsObjInSlot[tempSpellScript.inSlot] = null;
                 }
             }
             else
@@ -135,7 +135,7 @@ public class UIController : MonoBehaviour
     {
         if (!isDrag)
         {
-            Vector3 WayPoint = menu.SlotsForSpells[inSlot].GetComponent<RectTransform>().position;
+            Vector3 WayPoint = Menu.SlotsForSpells[inSlot].GetComponent<RectTransform>().position;
             ObjTransform.position = Vector3.Lerp(ObjTransform.position, WayPoint, 0.3f);
             ObjTransform.localPosition -= Vector3.forward;
         }

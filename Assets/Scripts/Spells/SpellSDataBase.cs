@@ -92,14 +92,14 @@ public class SpellSDataBase : MonoBehaviour
         WaveElements.Add(ArcaneElement);
         WaveElements.Add(ArcaneElement);
         WaveElements.Add(FireElement);
-        /////////////////////////////////////////
+        ///////////////////////////////////////// 
 
-        Attac = new SWNP("Attac", "Base Attac", 5f, 0f, 0.3f, HZSpell.SpellDamageTypes.Fire);
-
-        Spells.Add(new SWNP("FireBall", "over 9000 PlayerDamage", FireBallElements, 25f, 0f, 2f, HZSpell.SpellDamageTypes.Fire));
-        //Spells.Add(new DamageSpell("FrostBolt", "Slow", pointObj, FrostBoltElements, 1f, 1f, 2f, DamageSpell.SpellDamageTypes.Frost));
-        Spells.Add(new SWOP("Fire area", "Pian", pointObj, FireAreaElements, 10f * Time.deltaTime, 0f, 20f, HZSpell.SpellDamageTypes.Fire));
-        Spells.Add(new SWOP("Bomb", "BOOM", pointObj, BombElements, 7, 2000, 35, 0.5f, 10, HZSpell.SpellDamageTypes.Fire));
+        Attac = new SWNP("Attac", "Base Attac", 5f, 0f, 0.3f, SpellDamageType.Fire);
+        
+        Spells.Add(new SWNP("FireBall", "over 9000 PlayerDamage", FireBallElements, 25f, 0f, 2f, SpellDamageType.Fire));
+        //Spells.Add(new DamageSpell("FrostBolt", "Slow", pointObj, FrostBoltElements, 1f, 1f, 2f, SpellDamageType.Frost));
+        Spells.Add(new SWOP("Fire area", "Pian", pointObj, FireAreaElements, 10f * Time.deltaTime, 0f, 20f, SpellDamageType.Fire));
+        Spells.Add(new SWOP("Bomb", "BOOM", pointObj, BombElements, 7, 2000, 35, 0.5f, 10, SpellDamageType.Frost));
         Spells.Add(new SWNP("Wave", "PWWQWE", WaveElements, 0f, 20, 3000, 2f));
         Spells.Add(new MovementSpell("Blink", "Blink111", BlinkElements, 0f, 0, 15f));
     }

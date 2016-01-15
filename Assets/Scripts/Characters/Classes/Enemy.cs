@@ -26,8 +26,8 @@ public class Enemy : Character
         set { isDead = value; }
     }
 
-    public Enemy(Transform p_Transform, float p_Damage, float p_AttacDelay, float p_HP, float p_MoveSpeed)
-        : base(p_Damage, p_HP, p_MoveSpeed)
+    public Enemy(Transform p_Transform, float p_Damage, float p_AttacDelay, float p_HP, float p_Armor,float p_MoveSpeed, SpellResistance p_MagResist)
+        : base(p_Damage, p_HP, p_Armor,p_MoveSpeed,p_MagResist)
     {
         anim = p_Transform.GetComponent<Animator>();
         EnemyNav = p_Transform.GetComponent<NavMeshAgent>();
@@ -52,17 +52,6 @@ public class Enemy : Character
             EnemyNav.Stop();
     }
 
-    public void Dead(Transform myTransform)
-    {
-        if (CurHP1 <= 0)
-        {
-            if (!IsDead)
-            {
-                myTransform.GetComponent<EnemyScript>().DisableComponents();
-            }
-        }
-    }
-
     public void AttacTrigger()
     {
         timer += Time.deltaTime;
@@ -77,7 +66,7 @@ public class Enemy : Character
         timer = 0f;
         if (!PlayerScript.playerScript.player.isDead)
         {
-            PlayerScript.playerScript.player.TakeDamageBase(Damage);
+            PlayerScript.playerScript.player.TakePhysicalDamage(Damage1);
             anim.Play("attack");
         }
     }

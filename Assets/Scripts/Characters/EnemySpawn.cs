@@ -14,10 +14,12 @@ public class EnemySpawn : MonoBehaviour
 
     public List<Transform> EnemySpawnPoints = new List<Transform>();
 
-    [Tooltip("Спавнить босса сразу?")][Space(20)]
+    [Tooltip("Спавнить босса сразу?")]
+    [Space(20)]
     public bool spawnBoss;
 
-    [Tooltip("Максимальное количество крипов в одной волне")][Space(20)]
+    [Tooltip("Максимальное количество крипов в одной волне")]
+    [Space(20)]
     public int maxEnemyCount;
 
     [Tooltip("При каком количестве живых мобов спавнить босса")]
@@ -32,7 +34,7 @@ public class EnemySpawn : MonoBehaviour
     [Tooltip("Задержка спавна мобов")]
     public float delayBetweenBurst;
 
-    public int CreepWave = 1;
+    public static int CreepWave = 1;
 
     void Awake()
     {
@@ -100,7 +102,7 @@ public class EnemySpawn : MonoBehaviour
             SpawnBoss();
 
         for (int i = 0; i < burstEnemyCount; i++)
-        InvokeRepeating("SpawnCreeps", 0, delayBetweenBurst);
+            InvokeRepeating("SpawnCreeps", 0, delayBetweenBurst);
 
         BossResp = false;
         CharacterUIController.SetTextTrigger(CreepWave.ToString(), Color.red, 50);

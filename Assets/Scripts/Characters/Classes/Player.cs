@@ -14,8 +14,8 @@ public class Player : Character
     float flashSpeed = 5;
     Color flashColor = new Color(1f, 0f, 0f, 0.1f);
 
-    public static Image damageImage;
-    bool damaged;
+    public Image damageImage;
+    bool damaged = false;
     public bool isDead { get { return CurHP1 <= 0; } }
 
     Transform cameraTransform;
@@ -24,17 +24,14 @@ public class Player : Character
     public float maximumY = 45;
     float rotationSpeed = 30;
 
-    public static Slider playerHPSlider;
-
-    public Player(float p_HP, float p_HPRegen, float p_MoveSpeed)
-        : base(0, p_HP, p_HPRegen, p_MoveSpeed)
+    public Player(float p_HP, float p_HPRegen, float p_Armor,float p_MoveSpeed, SpellResistance p_MagResist)
+        : base(0, p_HP, p_HPRegen, p_Armor,p_MoveSpeed, p_MagResist)
     {
-        damaged = false;
-
         myTransform = PlayerScript.myTransform;
         myRigidbody = PlayerScript.myRigidBody;
+        damageImage = PlayerScript.playerScript.DamageImage;
+        hpSlider = PlayerScript.playerScript.HpSlider;
 
-        hpSlider = playerHPSlider;
         MaxHPSet = MaxHP;
 
         cameraTransform = myTransform.GetChild(0);//Camera.main.transform;
@@ -44,7 +41,7 @@ public class Player : Character
     {
         PlayerMovement.Set(h, 0f, v);
 
-        PlayerMovement = PlayerMovement.normalized * MoveSpeed * Time.deltaTime;
+        PlayerMovement = PlayerMovement.normalized * MoveSpeed1 * Time.deltaTime;
         PlayerMovement = myTransform.TransformDirection(PlayerMovement);
 
         myRigidbody.MovePosition(myTransform.position + PlayerMovement);
@@ -76,15 +73,9 @@ public class Player : Character
         damaged = false;
     }
 
-    public void TakeDamageBase(float Damage)
+    public void TakePhysicalDamage(float Damage)
     {
         damaged = true;
-        CurHP1 -= Damage;
-        hpSlider.value = CurHP1;
-    }
-
-    public override void TakeDamage(HZSpell SpellInfo)
-    {
-        TakeDamageBase(SpellInfo.SpellDamage1);
+        CurHP1 -= DamageCanculate(Damage);
     }
 }

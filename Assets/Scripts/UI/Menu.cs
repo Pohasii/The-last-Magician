@@ -9,9 +9,9 @@ public class Menu : MonoBehaviour
 
     public GameObject BackGround, SlotForSpells;//задний фон и префаб слота для спелов
 
-    public static List<Spell> SpellInSlot = new List<Spell>();//спелы в слоте
-    public static List<GameObject> SlotsForSpells = new List<GameObject>();//слоты для спелов
-    public static List<GameObject> SpellsObjInSlot = new List<GameObject>();//объекты спелов в слоте
+    public List<Spell> SpellInSlot = new List<Spell>();//спелы в слоте
+    public List<GameObject> SlotsForSpells = new List<GameObject>();//слоты для спелов
+    public List<GameObject> SpellsObjInSlot = new List<GameObject>();//объекты спелов в слоте
 
     public List<Element> ElementsInSlots = new List<Element>();//елементы в слоте
     public List<GameObject> SlotsForElements = new List<GameObject>();//слоты для елементов
@@ -37,7 +37,6 @@ public class Menu : MonoBehaviour
     void Awake()
     {
         SMenu = this;
-        Debug.Log(SpellsObjInSlot.Count);
     }
 
     void Start()
@@ -45,6 +44,15 @@ public class Menu : MonoBehaviour
         BackGround = GameObject.FindGameObjectWithTag("MenuBackGround");
         BackGround.transform.SetAsFirstSibling();
         CharactersDB.characterDB.SetStatsText(StatsText);
+
+        for (int i = 0; i < GameController.PlayerSpells.Count; i++)
+        {
+            CreateSpell(GameController.PlayerSpells[i]);
+        }
+        for (int i = 0; i < GameController.Elements.Count; i++)
+        {
+            ReSpawnElement(GameController.Elements[i]);
+        }
     }
 
     void Update()
@@ -98,6 +106,16 @@ public class Menu : MonoBehaviour
             }
             if (IsSpell)
             {
+                for (int j = 0; j < GameController.Elements.Count; j++)
+                {
+                    for (int k = 0; k < ElementsInSlots.Count; k++)
+                    if (ElementsInSlots[k].Id == GameController.Elements[j].Id)
+                    {
+                        GameController.Elements.RemoveAt(j);
+                        continue;
+                    }
+                }
+
                 CreateSpell(SpellSDataBase.Spells[i]);
                 for (int k = 0; k < ElementsInSlots.Count; k++)
                 {
@@ -120,7 +138,7 @@ public class Menu : MonoBehaviour
         slot.GetComponent<Slot>().CurSlot = SlotsForSpells.Count;
         SlotsForSpells.Add(slot);
         SpellsObjInSlot.Add(null);
-        if (SpellInSlot.Count < 1)
+        if (SpellInSlot.Count <= 1)
             return;
         slot.transform.parent.GetComponent<RectTransform>().sizeDelta += Vector2.right * SlotForSpells.GetComponent<RectTransform>().localScale.x;
     }
@@ -144,7 +162,7 @@ public class Menu : MonoBehaviour
         }
     }
 
-    public void ElementSpawn(Element p_element)
+    public void CreateElement(Element p_element)
     {
         if (GameController.RuneCount >= p_element.Cost1)
         {
@@ -153,11 +171,20 @@ public class Menu : MonoBehaviour
             ob.transform.SetParent(GetComponent<RectTransform>());
             ob.GetComponent<ElementScript>().element = p_element;
             ob.GetComponent<RectTransform>().localScale = UIElementPrefab.transform.localScale;
+            GameController.Elements.Add(p_element);
         }
         else
         {
             animator.SetTrigger("NoRune");
         }
+    }
+
+    public void ReSpawnElement(Element p_element)
+    {
+        GameObject ob = (GameObject)Instantiate(UIElementPrefab, Vector3.up * 10, Quaternion.identity);
+        ob.transform.SetParent(GetComponent<RectTransform>());
+        ob.GetComponent<ElementScript>().element = p_element;
+        ob.GetComponent<RectTransform>().localScale = UIElementPrefab.transform.localScale;
     }
 
     public void ElementReshuffle(int ElementSloTNum, GameObject elementObj, bool OnceClick)

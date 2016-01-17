@@ -14,8 +14,6 @@ public class MenuController : MonoBehaviour
     public GameObject HelpWindow;//Помощь
     public static List<Animator> PopUpMenuAnimList = new List<Animator>();//анимация всплывающего меню
 
-
-
     void Awake()
     {
         PopUpMenuAnimList.Clear();
@@ -48,14 +46,5 @@ public class MenuController : MonoBehaviour
         LevelManager.levelManager.BeginFade(-1);
         CurUI.SetActive(false);
         NextUI.SetActive(true);
-    }
-
-    public IEnumerator NextMenu()
-    {
-        LevelManager.levelManager.BeginFade(1);
-        yield return new WaitForSeconds(LevelManager.levelManager.FadeSpeed);
-        LevelManager.levelManager.BeginFade(-1);
-        mainMenu.SetActive(false);
-        gameMenu.SetActive(true);
     }
 }

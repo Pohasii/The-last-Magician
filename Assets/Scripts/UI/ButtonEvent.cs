@@ -40,7 +40,7 @@ public class ButtonEvent : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
             {
                 case "CreateElement": MenuController.menuController.ShowCreateElementBar(); break;
                 case "Accept": Menu.SMenu.ElementCheck(); break;
-                case "Back": StartCoroutine(LevelManager.levelManager.LoadLevelWithFade(LevelManager.levelManager.Loadlevel, "Menu")); break;
+                case "Back": StartCoroutine(MenuController.menuController.NextMenu(MenuController.menuController.gameMenu, MenuController.menuController.mainMenu)); break;
                 case "Start": Menu.SMenu.LoadLevel(); StartCoroutine(LevelManager.levelManager.LoadLevelWithFade(LevelManager.levelManager.LoadLevelAsync, "Game")); break;
                 case "Panel": MenuController.menuController.CloseAllMenu(); break;
             }

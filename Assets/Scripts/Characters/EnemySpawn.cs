@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,8 +9,11 @@ public class EnemySpawn : MonoBehaviour
 
     public int CurCreepCount, CurBossCount, CurTotalEnemyCount;
 
+    [Space(20)]
     public bool BossResp;
     public GameObject EnemyBoss, EnemyCreep;
+
+    public GameObject EndOfCreepWave;
 
     public List<Transform> EnemySpawnPoints = new List<Transform>();
 
@@ -49,6 +52,15 @@ public class EnemySpawn : MonoBehaviour
 
     void Start()
     {
+        for (int i = 0; i < CreepWave - 1; i++)
+        {
+            PlayerScript.playerScript.player.StateByWave();
+            CharactersDB.characterDB.StateByWave();
+            maxEnemyCount++;
+            startEnemyCount++;
+            burstEnemyCount++;
+        }
+
         BossResp = false;
         NewCreepWave();
     }
@@ -83,15 +95,7 @@ public class EnemySpawn : MonoBehaviour
             }
             else if (CurCreepCount == 0 && CurBossCount == 0)
             {
-                PlayerScript.playerScript.player.StateByWave();
-                CharactersDB.characterDB.StateByWave();
-
-                CreepWave++;
-                CurTotalEnemyCount = 0;
-
-                NewCreepWave();
-
-                //Time.timeScale = 0;
+                EndOfCreepWave.SetActive(true);
             }
         }
     }
@@ -106,6 +110,7 @@ public class EnemySpawn : MonoBehaviour
 
         BossResp = false;
         CharacterUIController.SetTextTrigger(CreepWave.ToString(), Color.red, 50);
+
         maxEnemyCount++;
         startEnemyCount++;
         burstEnemyCount++;
@@ -137,5 +142,21 @@ public class EnemySpawn : MonoBehaviour
         CurTotalEnemyCount++;
 
         BossResp = true;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (EndOfCreepWave.activeSelf && other.tag == "Player")
+        {
+            PlayerScript.playerScript.player.StateByWave();
+            CharactersDB.characterDB.StateByWave();
+
+            CreepWave++;
+            CurTotalEnemyCount = 0;
+
+            NewCreepWave();
+
+            StartCoroutine(LevelManager.levelManager.LoadLevelWithFade(LevelManager.levelManager.LoadLevelFromGame, "Menu"));
+        }
     }
 }

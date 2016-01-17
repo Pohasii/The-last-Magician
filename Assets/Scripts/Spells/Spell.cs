@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -290,7 +290,7 @@ public class SWNP : HZSpell
     }
 }
 
-public enum SpellDamageType { Fire, Frost, Arcane, Shadow, Nature, Holy }
+public enum SpellDamageType { Fire, Frost, Arcane}
 
 [System.Serializable]
 public class SWOP : HZSpell
@@ -469,7 +469,7 @@ public class SpellPoints
         set { point1Obj = value; }
     }
 
-    GameObject lineObj, lineObj1;//объект на котором висит компонент LineRenderer
+    GameObject lineObj;//бъект на котором висит компонент LineRenderer
     LineRenderer line, line1, mainLine;//ссылка на компонент LineRenderer
     public static Material lineMaterial;
 

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -34,7 +35,7 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         loadingImage.enabled = true;
-        if (Application.loadedLevelName == "StartScene")
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("StartScene"))
             StartCoroutine(LoadLevelWithFade(LoadLevelAsync, "Menu", 2, 0));
     }
 
@@ -57,25 +58,25 @@ public class LevelManager : MonoBehaviour
 
     public void Loadlevel(string levelName)
     {
-        Application.LoadLevel(levelName);
+        SceneManager.LoadScene(levelName);
     }
 
     public void LoadLevelFromGame(string levelName)
     {
-        Application.LoadLevel(levelName);
+        SceneManager.LoadScene(levelName);
         StartCoroutine(LoadMenuFromGame());
     }
 
     IEnumerator LoadMenuFromGame()
     {
         yield return new WaitForSeconds(0);
-        StartCoroutine(MenuController.menuController.NextMenu());
-        
+        MenuController.menuController.mainMenu.SetActive(false);
+        MenuController.menuController.gameMenu.SetActive(true);
     }
 
     public void LoadLevelAsync(string levelName, float loadingDuration)
     {
-        async = Application.LoadLevelAsync(levelName);
+        async = SceneManager.LoadSceneAsync(levelName);
         async.allowSceneActivation = false;
         StartCoroutine(LoadingTextAnim(loadingDuration));
     }

@@ -13,7 +13,7 @@ public class GameButtonEvent : MonoBehaviour, IPointerDownHandler
             {
                 case "Continue": CharacterUIController.charUIController.CloseInGameMenu(); break;
                 case "Settings": CharacterUIController.charUIController.HelpWindow.gameObject.SetActive(true); break;
-                case "Exit": CharactersDB.characterDB.Save();Time.timeScale = 1; StartCoroutine(LevelManager.levelManager.LoadLevelWithFade(LevelManager.levelManager.LoadLevelFromGame, "Menu")); break;
+                case "Exit": Time.timeScale = 1; StartCoroutine(LevelManager.levelManager.LoadLevelWithFade(LevelManager.levelManager.LoadLevelFromGame, "Menu")); break;
             }
         }
     }

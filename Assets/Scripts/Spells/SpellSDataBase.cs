@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class SpellSDataBase : MonoBehaviour
 {
@@ -51,14 +52,14 @@ public class SpellSDataBase : MonoBehaviour
 
         SpellPoints.lineMaterial = LineMaterial;
 
-        if (Application.loadedLevelName == "Menu")
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Menu"))
         {
             FireElement = new Element(0, "Fire", "Кароче это огонь", 10, Menu.SMenu.FireElementPos.localPosition, ElementMaterial[0]);
             FrostElement = new Element(1, "Frost", "Кароче это лед", 10, Menu.SMenu.FrostElementPos.localPosition, ElementMaterial[1]);
             ArcaneElement = new Element(2, "Arcane", "Кароче это тайная магия", 10, Menu.SMenu.ArcaneElementPos.localPosition, ElementMaterial[2]);
         }
         else
-            if (Application.loadedLevelName == "Game")
+            if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Game"))
             {
                 FireElement = new Element("Fire", "Кароче это огонь");
                 FrostElement = new Element("Frost", "Кароче это лед");

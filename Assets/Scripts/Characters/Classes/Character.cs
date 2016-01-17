@@ -71,9 +71,6 @@ public class Character
         SpellRes[0] = new SpellResistance(SpellDamageType.Fire, Random.Range(8, 12));
         SpellRes[1] = new SpellResistance(SpellDamageType.Frost, Random.Range(8, 12));
         SpellRes[2] = new SpellResistance(SpellDamageType.Arcane, Random.Range(8, 12));
-        SpellRes[3] = new SpellResistance(SpellDamageType.Holy, Random.Range(8, 12));
-        SpellRes[4] = new SpellResistance(SpellDamageType.Nature, Random.Range(8, 12));
-        SpellRes[5] = new SpellResistance(SpellDamageType.Shadow, Random.Range(8, 12));
 
         MagResist = SpellRes[Random.Range(0, SpellRes.Length)];
 
@@ -98,9 +95,9 @@ public class Character
 
     public float DamageCanculate(float Damage)
     {
-        float NewDamage;
-        NewDamage = Damage - ((Armor * 1.6180339887f) / 100f) * 10f;
-        return NewDamage;
+        float NewDamage = Damage - ((Armor * 1.6180339887f) / 100f) * 10f;
+
+        return NewDamage >= 0 ? NewDamage : 0;
     }
 
     public void StateByWave()
@@ -108,6 +105,9 @@ public class Character
         Damage1 += CharactersDB.characterDB.StateUp(Damage1);
         MaxHPSet += CharactersDB.characterDB.StateUp(MaxHP) / 4;
         MoveSpeed1 += CharactersDB.characterDB.StateUp(MoveSpeed1) / 8;
+        HpRegen += CharactersDB.characterDB.StateUp(HpRegen);
+        Armor += CharactersDB.characterDB.StateUp(Armor);
+        MagResist.Resistance += CharactersDB.characterDB.StateUp(MagResist.Resistance);
         SpellSDataBase.Attac.SpellDamage1 += CharactersDB.characterDB.StateUp(SpellSDataBase.Attac.SpellDamage1);
     }
 }
@@ -128,7 +128,7 @@ public struct SpellResistance
     {
         if (ResistanceType == p_ResistanceType)
         {
-            float NewDamage = Damage - Resistance;
+            float NewDamage = Damage - ((Resistance * 1.6180339887f) / 100f) * 10f;
 
             return NewDamage >= 0 ? NewDamage : 0;
         }

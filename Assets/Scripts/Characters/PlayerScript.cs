@@ -46,11 +46,6 @@ public class PlayerScript : MonoBehaviour
         player = new Player(CharactersDB.characterDB.PlayerHP, CharactersDB.characterDB.PlayerHPRegen, CharactersDB.characterDB.PlayerArmor, CharactersDB.characterDB.PlayerMoveSpeed, CharactersDB.characterDB.PlayerMagResist);
     }
 
-    void Start()
-    {
-        CharactersDB.characterDB.Load();
-    }
-
     public bool CheckRuneCD(Spell spell)
     {
         bool isSuitable = true;
